@@ -27,7 +27,7 @@ class LockScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController passwordController = TextEditingController();
-    const String correctPassword = 'password123'; // Set your desired password
+    const String correctPassword = '123'; // Set password
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;

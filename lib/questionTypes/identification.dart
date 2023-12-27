@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Randomizer extends StatelessWidget {
-  const Randomizer({super.key});
+class Identification extends StatelessWidget {
+  const Identification({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class Randomizer extends StatelessWidget {
       //   title: const Text(''),
       // ),
       body: Center(
-        child: Text('This is the Randomizer Page!'),
+        child: Text('This is the Identification Page!'),
       ),
     );
   }
