@@ -26,6 +26,9 @@ class LockScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController passwordController = TextEditingController();
+    const String correctPassword = 'password123'; // Set your desired password
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -47,15 +50,54 @@ class LockScreenPage extends StatelessWidget {
                   style: TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 20),
+                SizedBox(
+                  width: 300,
+                  height: 100,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10), // Adjust padding
+                          ),
+                        ),
+                      ]),
+                ),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate to the second page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Home()),
-                    );
+                    if (passwordController.text == correctPassword) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                      );
+                    } else {
+                      // Show an error message or handle incorrect password
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Incorrect Password'),
+                            content: const Text(
+                                'Please enter the correct password.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
-                  child: const Text('Enter'),
+                  child: const Text('Go to Second Page'),
                 ),
               ],
             ),
