@@ -4,6 +4,36 @@ import '../questionTypes/identification.dart';
 import '../questionTypes/multiple_choice.dart';
 import '../questionTypes/true_or_false.dart';
 
+class MCQuestion {
+  final String questionText;
+  final List<String> choices;
+  final String answer;
+
+  MCQuestion({
+    required this.questionText,
+    required this.choices,
+    required this.answer,
+  });
+}
+
+List<MCQuestion> easyQuestions = [
+  MCQuestion(
+    questionText: "What is the largest mammal in the world?",
+    choices: ["Elephant", "Blue Whale", "Giraffe", "Rhino"],
+    answer: "Blue Whale",
+  ),
+  MCQuestion(
+    questionText: "What do bees collect and use to create honey?",
+    choices: ["Pollen", "Dust", "Leaves", "Bark"],
+    answer: "Pollen",
+  ),
+  MCQuestion(
+    questionText: "Which animal is known for its ability to change color?",
+    choices: ["Chameleon", "Octopus", "Polar Bear", "Tiger"],
+    answer: "Chameleon",
+  ),
+];
+
 class RandomizerPage extends StatelessWidget {
   const RandomizerPage({super.key});
 
@@ -11,6 +41,7 @@ class RandomizerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String selectedPage = "multipleChoice";
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -29,10 +60,17 @@ class RandomizerPage extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      const Expanded(
-                        flex: 2,
-                        child: MultipleChoicePage(),
-                      ),
+                      (() {
+                        if (selectedPage == "multipleChoice") {
+                          return const MultipleChoicePage();
+                        } else if (selectedPage == "trueOrFalse") {
+                          return const TrueOrFalsePage();
+                        } else if (selectedPage == "identification") {
+                          return const IdentificationPage();
+                        } else {
+                          return Container();
+                        }
+                      })(),
                       Expanded(
                         flex: 1,
                         child: Container(
