@@ -1,31 +1,38 @@
-class MCQuestion {
+abstract class Question {
   final String questionText;
+  final String type;
+
+  Question({required this.questionText, required this.type});
+}
+
+class MCQuestion extends Question {
   final List<String> choices;
   final String answer;
 
   MCQuestion({
-    required this.questionText,
+    required String questionText,
     required this.choices,
     required this.answer,
-  });
+    required String type,
+  }) : super(questionText: questionText, type: type);
 }
 
-class TFQuestion {
-  final String questionText;
+class TFQuestion extends Question {
   final bool answer;
 
   TFQuestion({
-    required this.questionText,
+    required String questionText,
     required this.answer,
-  });
+    required String type,
+  }) : super(questionText: questionText, type: type);
 }
 
-class IQuestion {
-  final String questionText;
+class IQuestion extends Question {
   final String answer;
 
   IQuestion({
-    required this.questionText,
+    required String questionText,
     required this.answer,
-  });
+    required String type,
+  }) : super(questionText: questionText, type: type);
 }
