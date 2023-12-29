@@ -3,18 +3,7 @@ import '../components/countdown.dart';
 import '../questionTypes/identification.dart';
 import '../questionTypes/multiple_choice.dart';
 import '../questionTypes/true_or_false.dart';
-
-class MCQuestion {
-  final String questionText;
-  final List<String> choices;
-  final String answer;
-
-  MCQuestion({
-    required this.questionText,
-    required this.choices,
-    required this.answer,
-  });
-}
+import '../classes/questions.dart';
 
 List<MCQuestion> easyQuestions = [
   MCQuestion(
@@ -34,6 +23,36 @@ List<MCQuestion> easyQuestions = [
   ),
 ];
 
+List<TFQuestion> trueOrFalseQuestions = [
+  TFQuestion(
+    questionText: "The Earth is flat.",
+    answer: false,
+  ),
+  TFQuestion(
+    questionText: "Flutter is a framework for mobile development.",
+    answer: true,
+  ),
+  TFQuestion(
+    questionText: "Water boils at 100 degrees Celsius.",
+    answer: true,
+  ),
+];
+
+List<IQuestion> identificationQuestions = [
+  IQuestion(
+    questionText: "What is the capital of France?",
+    answer: "Paris",
+  ),
+  IQuestion(
+    questionText: "In which year did the United States gain independence?",
+    answer: "1776",
+  ),
+  IQuestion(
+    questionText: "Who is the author of 'Romeo and Juliet'?",
+    answer: "William Shakespeare",
+  ),
+];
+
 class RandomizerPage extends StatelessWidget {
   const RandomizerPage({super.key});
 
@@ -41,7 +60,7 @@ class RandomizerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String selectedPage = "multipleChoice";
+    String selectedPage = "tf";
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -61,12 +80,18 @@ class RandomizerPage extends StatelessWidget {
                   child: Row(
                     children: [
                       (() {
-                        if (selectedPage == "multipleChoice") {
-                          return const MultipleChoicePage();
-                        } else if (selectedPage == "trueOrFalse") {
-                          return const TrueOrFalsePage();
-                        } else if (selectedPage == "identification") {
-                          return const IdentificationPage();
+                        if (selectedPage == "mc") {
+                          return Expanded(
+                              child: MultipleChoicePage(
+                                  question: easyQuestions[1]));
+                        } else if (selectedPage == "tf") {
+                          return Expanded(
+                              child: TrueOrFalsePage(
+                                  question: trueOrFalseQuestions[1]));
+                        } else if (selectedPage == "id") {
+                          return Expanded(
+                              child: IdentificationPage(
+                                  question: identificationQuestions[1]));
                         } else {
                           return Container();
                         }

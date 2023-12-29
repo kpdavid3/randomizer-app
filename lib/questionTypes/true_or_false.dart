@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../components/choicebox.dart';
+import '../classes/questions.dart';
 
 class TrueOrFalsePage extends StatelessWidget {
-  const TrueOrFalsePage({super.key});
+  final TFQuestion question;
+
+  const TrueOrFalsePage({super.key, required this.question});
 
   void _showAnswer() {}
 
@@ -31,9 +34,9 @@ class TrueOrFalsePage extends StatelessWidget {
               style: TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 5),
-            const Text(
-              'What number was the Apollo mission that successfully put a man on the moon for the first time in human history?',
-              style: TextStyle(fontSize: 24),
+            Text(
+              question.questionText,
+              style: const TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
             Column(

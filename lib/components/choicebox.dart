@@ -33,11 +33,19 @@ class ChoiceBox extends StatelessWidget {
           const SizedBox(height: 16.0), // Add some spacing if needed
           Text(
             text,
-            style: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w300,
-              color: Colors.black,
-            ),
+            style: status
+                ? const TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight
+                        .bold, // Change to your desired style for true status
+                    color: Colors
+                        .green, // Change to your desired color for true status
+                  )
+                : const TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.black,
+                  ),
             textAlign: TextAlign.center,
           ),
         ],

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../components/choicebox.dart';
+import '../classes/questions.dart';
 
 class MultipleChoicePage extends StatelessWidget {
-  const MultipleChoicePage({super.key});
+  final MCQuestion question;
+  const MultipleChoicePage({super.key, required this.question});
 
   void _showAnswer() {}
 
@@ -31,30 +33,36 @@ class MultipleChoicePage extends StatelessWidget {
               style: TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 5),
-            const Text(
-              'What number was the Apollo mission that successfully put a man on the moon for the first time in human history?',
-              style: TextStyle(fontSize: 24),
+            Text(
+              question.questionText,
+              style: const TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
             Column(
               children: [
-                const Row(
+                Row(
                   children: [
                     Expanded(
-                        child: ChoiceBox(text: 'A. Apollo 10', status: true)),
+                        child: ChoiceBox(
+                            text: question.choices[0],
+                            status: question.choices[0] == question.answer)),
                     Expanded(
                         child: ChoiceBox(
-                      text: "B. Apollo 11",
-                      status: false,
+                      text: question.choices[1],
+                      status: question.choices[1] == question.answer,
                     )),
                   ],
                 ),
-                const Row(
+                Row(
                   children: [
                     Expanded(
-                        child: ChoiceBox(text: "C. Apollo 11", status: true)),
+                        child: ChoiceBox(
+                            text: question.choices[2],
+                            status: question.choices[2] == question.answer)),
                     Expanded(
-                        child: ChoiceBox(text: "D. Apollo 12", status: true)),
+                        child: ChoiceBox(
+                            text: question.choices[3],
+                            status: question.choices[3] == question.answer)),
                   ],
                 ),
                 const SizedBox(height: 20),
