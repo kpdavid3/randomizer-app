@@ -12,7 +12,6 @@ class MultipleChoicePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 28.0),
         decoration: const BoxDecoration(
           color: Colors.white, // White background for the rounded rectangle
           borderRadius: BorderRadius.only(
@@ -23,15 +22,6 @@ class MultipleChoicePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Easy Round',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Question 1 out of 10',
-              style: TextStyle(fontSize: 14),
-            ),
             const SizedBox(height: 5),
             Text(
               question.questionText,
