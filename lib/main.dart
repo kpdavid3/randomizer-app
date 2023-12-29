@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './pages/home.dart';
 import './pages/randomizer.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // import 'dart:async';
 void main() {
@@ -46,9 +47,12 @@ class LockScreenPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Quiz Randomizer',
-                  style: TextStyle(fontSize: 18),
+                  style: GoogleFonts.poppins(
+                    fontSize: 64,
+                    color: Colors.red,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
@@ -82,9 +86,20 @@ class LockScreenPage extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Incorrect Password'),
-                            content: const Text(
-                                'Please enter the correct password.'),
+                            title: Text(
+                              'Incorrect Password',
+                              style: GoogleFonts.poppins(
+                                fontSize: 24,
+                                color: Colors.black,
+                              ),
+                            ),
+                            content: Text(
+                              'Please enter the correct password.',
+                              style: GoogleFonts.poppins(
+                                fontSize: 24,
+                                color: Colors.black,
+                              ),
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -98,7 +113,13 @@ class LockScreenPage extends StatelessWidget {
                       );
                     }
                   },
-                  child: const Text('Go to Second Page'),
+                  child: Text(
+                    'Enter',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ],
             ),
