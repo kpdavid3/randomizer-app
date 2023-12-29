@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'edit_page.dart';
 import 'randomizer.dart';
 import '../components/button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -24,9 +25,24 @@ class Home extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Image.asset(
+                  'logo2.png', // Replace with the actual path to your image
+                  height: 200, // Adjust the height as needed
+                ),
+                Text(
+                  'National Science Quiz Contest',
+                  style: GoogleFonts.poppins(
+                    fontSize: 36,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
                   'Quiz Randomizer',
-                  style: TextStyle(fontSize: 18),
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Button(
@@ -48,6 +64,19 @@ class Home extends StatelessWidget {
                           builder: (context) => const RandomizerPage()),
                     );
                   },
+                ),
+                const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Back',
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import './pages/home.dart';
-import './pages/randomizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './components/button.dart';
 
@@ -48,14 +47,17 @@ class LockScreenPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Image.asset(
+                  'logo1.png', // Replace with the actual path to your image
+                  height: 200, // Adjust the height as needed
+                ),
                 Text(
                   'Quiz Randomizer',
                   style: GoogleFonts.poppins(
-                    fontSize: 64,
+                    fontSize: 48,
                     color: Colors.red,
                   ),
                 ),
-                const SizedBox(height: 20),
                 SizedBox(
                   width: 300,
                   height: 100,
@@ -73,7 +75,7 @@ class LockScreenPage extends StatelessWidget {
                         ),
                       ]),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Button(
                   buttonText: "Enter",
                   onPressed: () {
