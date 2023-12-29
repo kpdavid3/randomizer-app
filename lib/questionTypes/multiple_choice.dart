@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/choicebox.dart';
 
 class MultipleChoicePage extends StatelessWidget {
   const MultipleChoicePage({super.key});
@@ -37,16 +38,23 @@ class MultipleChoicePage extends StatelessWidget {
             const SizedBox(height: 20),
             Column(
               children: [
-                Row(
+                const Row(
                   children: [
-                    Expanded(child: buildChoiceBox("A. Apollo 10")),
-                    Expanded(child: buildChoiceBox("B. Apollo 11")),
+                    Expanded(
+                        child: ChoiceBox(text: 'A. Apollo 10', status: true)),
+                    Expanded(
+                        child: ChoiceBox(
+                      text: "B. Apollo 11",
+                      status: false,
+                    )),
                   ],
                 ),
-                Row(
+                const Row(
                   children: [
-                    Expanded(child: buildChoiceBox("C. Apollo 11")),
-                    Expanded(child: buildChoiceBox("D. Apollo 12")),
+                    Expanded(
+                        child: ChoiceBox(text: "C. Apollo 11", status: true)),
+                    Expanded(
+                        child: ChoiceBox(text: "D. Apollo 12", status: true)),
                   ],
                 ),
                 const SizedBox(height: 20),

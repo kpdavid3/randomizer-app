@@ -85,33 +85,3 @@ class RandomizerPage extends StatelessWidget {
     );
   }
 }
-
-Widget buildChoiceBox(String text) {
-  return Container(
-    margin: const EdgeInsets.all(8.0),
-    padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(15),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.4),
-          spreadRadius: 1,
-          blurRadius: 2,
-          offset: const Offset(0, 1),
-        ),
-      ],
-    ),
-    child: Center(
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 24.0,
-          fontWeight: FontWeight.w300,
-          color: Colors.black,
-        ),
-        textAlign: TextAlign.center,
-      ),
-    ),
-  );
-}
