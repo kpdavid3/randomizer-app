@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/choicebox.dart';
 import '../classes/questions.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MultipleChoicePage extends StatelessWidget {
   final MCQuestion question;
@@ -25,7 +26,10 @@ class MultipleChoicePage extends StatelessWidget {
             const SizedBox(height: 5),
             Text(
               question.questionText,
-              style: const TextStyle(fontSize: 24),
+              style: GoogleFonts.poppins(
+                fontSize: 24,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 20),
             Column(

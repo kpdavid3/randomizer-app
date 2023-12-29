@@ -5,6 +5,7 @@ import '../questionTypes/multiple_choice.dart';
 import '../questionTypes/true_or_false.dart';
 import '../classes/questions.dart';
 import 'dart:math';
+import 'package:google_fonts/google_fonts.dart';
 
 List<Question> allQuestions = [
   MCQuestion(
@@ -128,9 +129,6 @@ class _RandomizerPageState extends State<RandomizerPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Question randomQuestion = getRandomQuestion(allQuestions);
-
-    List<Question> randomQuestions = getRandomQuestions(allQuestions, 10);
     String selectedPage = randomQuestions[currentPage].type;
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -162,12 +160,19 @@ class _RandomizerPageState extends State<RandomizerPage> {
                             children: [
                               Text(
                                 '$round round',
-                                style: const TextStyle(fontSize: 18),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 24,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 5),
                               Text(
-                                'Question $currentPage out of 10',
-                                style: const TextStyle(fontSize: 14),
+                                'Question ${currentPage + 1} out of 10',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                ),
                               ),
                               (() {
                                 if (selectedPage == "mc") {
@@ -220,7 +225,15 @@ class _RandomizerPageState extends State<RandomizerPage> {
                                 });
                               }
                             : null,
-                        child: Text('Prev'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.pink,
+                        ),
+                        child: const Text(
+                          'Prev',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 10),
                       for (int i = 0; i < 10; i++)
@@ -236,11 +249,14 @@ class _RandomizerPageState extends State<RandomizerPage> {
                                 backgroundColor: currentPage == i
                                     ? Colors.red
                                     : Colors.white,
+                                foregroundColor: Colors.pink,
                               ),
                               child: Text(
                                 '${i + 1}',
                                 style: TextStyle(
-                                  color: currentPage == i ? Colors.white : null,
+                                  color: currentPage == i
+                                      ? Colors.white
+                                      : Colors.black,
                                 ),
                               ),
                             ),
@@ -255,7 +271,15 @@ class _RandomizerPageState extends State<RandomizerPage> {
                                 });
                               }
                             : null,
-                        child: Text('Next'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.pink,
+                        ),
+                        child: const Text(
+                          'Next',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                     ],
                   ),
