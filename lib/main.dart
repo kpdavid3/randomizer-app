@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './pages/home.dart';
+import './pages/randomizer.dart';
 
 // import 'dart:async';
 void main() {
@@ -73,7 +74,8 @@ class LockScreenPage extends StatelessWidget {
                     if (passwordController.text == correctPassword) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Home()),
+                        MaterialPageRoute(
+                            builder: (context) => const RandomizerPage()),
                       );
                     } else {
                       // Show an error message or handle incorrect password
