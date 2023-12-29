@@ -6,6 +6,7 @@ import '../questionTypes/true_or_false.dart';
 import '../classes/questions.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
+import '../components/button.dart';
 
 List<Question> allQuestions = [
   MCQuestion(
@@ -119,6 +120,7 @@ class RandomizerPage extends StatefulWidget {
 class _RandomizerPageState extends State<RandomizerPage> {
   late List<Question> randomQuestions;
   int currentPage = 0;
+  bool questionState = false;
   String round = "Easy";
 
   @override
@@ -135,7 +137,7 @@ class _RandomizerPageState extends State<RandomizerPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
-        color: Colors.red, // Set red background color
+        color: Colors.red[200], // Set red background color
         child: Center(
           child: Container(
             width: screenWidth * 0.95,
@@ -180,23 +182,37 @@ class _RandomizerPageState extends State<RandomizerPage> {
                                       flex: 2,
                                       child: MultipleChoicePage(
                                           question: randomQuestions[currentPage]
-                                              as MCQuestion));
+                                              as MCQuestion,
+                                          state: questionState));
                                 } else if (selectedPage == "tf") {
                                   return Expanded(
                                       flex: 2,
                                       child: TrueOrFalsePage(
                                           question: randomQuestions[currentPage]
-                                              as TFQuestion));
+                                              as TFQuestion,
+                                          state: questionState));
                                 } else if (selectedPage == "id") {
                                   return Expanded(
                                       flex: 2,
                                       child: IdentificationPage(
                                           question: randomQuestions[currentPage]
-                                              as IQuestion));
+                                              as IQuestion,
+                                          state: questionState));
                                 } else {
                                   return Container();
                                 }
                               })(),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Button(
+                                  buttonText: 'Show Answer',
+                                  onPressed: () {
+                                    setState(() {
+                                      questionState = !questionState;
+                                    });
+                                  },
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -204,8 +220,13 @@ class _RandomizerPageState extends State<RandomizerPage> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          color: Colors.white,
-                          child: CountdownApp(),
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .white, // White background for the rounded rectangle
+                            borderRadius:
+                                BorderRadius.circular(20), // Set border radius
+                          ),
+                          child: const CountdownApp(),
                         ),
                       ),
                     ],
@@ -213,7 +234,12 @@ class _RandomizerPageState extends State<RandomizerPage> {
                 ),
                 Container(
                   height: 100.0,
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: Colors
+                        .white, // White background for the rounded rectangle
+                    borderRadius:
+                        BorderRadius.circular(20), // Set border radius
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -222,6 +248,7 @@ class _RandomizerPageState extends State<RandomizerPage> {
                             ? () {
                                 setState(() {
                                   currentPage--;
+                                  questionState = false;
                                 });
                               }
                             : null,
@@ -243,6 +270,7 @@ class _RandomizerPageState extends State<RandomizerPage> {
                               onPressed: () {
                                 setState(() {
                                   currentPage = i;
+                                  questionState = false;
                                 });
                               },
                               style: ElevatedButton.styleFrom(
@@ -268,6 +296,7 @@ class _RandomizerPageState extends State<RandomizerPage> {
                             ? () {
                                 setState(() {
                                   currentPage++;
+                                  questionState = false;
                                 });
                               }
                             : null,
@@ -284,40 +313,6 @@ class _RandomizerPageState extends State<RandomizerPage> {
                     ],
                   ),
                 ),
-                // Container(
-                //   height: 100.0,
-                //   color: Colors.white,
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       ElevatedButton(
-                //         onPressed: () {
-                //           // Handle prev button press
-                //         },
-                //         child: Text('Prev'),
-                //       ),
-                //       const SizedBox(width: 10),
-                //       for (int i = 1; i <= 10; i++)
-                //         Row(
-                //           children: [
-                //             ElevatedButton(
-                //               onPressed: () {
-                //                 // Handle button press
-                //               },
-                //               child: Text('$i'),
-                //             ),
-                //             const SizedBox(width: 10),
-                //           ],
-                //         ),
-                //       ElevatedButton(
-                //         onPressed: () {
-                //           // Handle next button press
-                //         },
-                //         child: Text('Next'),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           ),

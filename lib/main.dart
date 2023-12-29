@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './pages/home.dart';
-import './pages/randomizer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import './components/button.dart';
 
 // import 'dart:async';
 void main() {
@@ -35,7 +35,7 @@ class LockScreenPage extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
-        color: Colors.red, // Set red background color
+        color: Colors.red[200], // Set red background color
         child: Center(
           child: Container(
             width: screenWidth * 0.95,
@@ -47,14 +47,17 @@ class LockScreenPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Image.asset(
+                  'logo1.png', // Replace with the actual path to your image
+                  height: 200, // Adjust the height as needed
+                ),
                 Text(
                   'Quiz Randomizer',
                   style: GoogleFonts.poppins(
-                    fontSize: 64,
+                    fontSize: 48,
                     color: Colors.red,
                   ),
                 ),
-                const SizedBox(height: 20),
                 SizedBox(
                   width: 300,
                   height: 100,
@@ -72,8 +75,9 @@ class LockScreenPage extends StatelessWidget {
                         ),
                       ]),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
+                const SizedBox(height: 10),
+                Button(
+                  buttonText: "Enter",
                   onPressed: () {
                     if (passwordController.text == correctPassword) {
                       Navigator.push(
@@ -113,13 +117,6 @@ class LockScreenPage extends StatelessWidget {
                       );
                     }
                   },
-                  child: Text(
-                    'Enter',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
                 ),
               ],
             ),

@@ -5,8 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class TrueOrFalsePage extends StatelessWidget {
   final TFQuestion question;
+  final bool state;
 
-  const TrueOrFalsePage({super.key, required this.question});
+  const TrueOrFalsePage(
+      {super.key, required this.question, required this.state});
 
   void _showAnswer() {}
 
@@ -39,22 +41,17 @@ class TrueOrFalsePage extends StatelessWidget {
                   children: [
                     Expanded(
                         child: ChoiceBox(
-                            text: 'True', status: true == question.answer)),
+                      text: 'True',
+                      status: (true == question.answer && state),
+                    )),
                     Expanded(
                         child: ChoiceBox(
                       text: "False",
-                      status: false == question.answer,
+                      status: (false == question.answer && state),
                     )),
                   ],
                 ),
                 const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: ElevatedButton(
-                    onPressed: _showAnswer,
-                    child: const Text('Show Answer'),
-                  ),
-                )
               ],
             )
           ],
