@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class MultipleChoicePage extends StatelessWidget {
   final MCQuestion question;
-  const MultipleChoicePage({super.key, required this.question});
-
-  void _showAnswer() {}
+  final bool state;
+  const MultipleChoicePage(
+      {super.key, required this.question, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +39,12 @@ class MultipleChoicePage extends StatelessWidget {
                     Expanded(
                         child: ChoiceBox(
                             text: question.choices[0],
-                            status: question.choices[0] == question.answer)),
+                            status: (question.choices[0] == question.answer &&
+                                state))),
                     Expanded(
                         child: ChoiceBox(
                       text: question.choices[1],
-                      status: question.choices[1] == question.answer,
+                      status: (question.choices[1] == question.answer && state),
                     )),
                   ],
                 ),
@@ -52,21 +53,16 @@ class MultipleChoicePage extends StatelessWidget {
                     Expanded(
                         child: ChoiceBox(
                             text: question.choices[2],
-                            status: question.choices[2] == question.answer)),
+                            status: (question.choices[2] == question.answer &&
+                                state))),
                     Expanded(
                         child: ChoiceBox(
                             text: question.choices[3],
-                            status: question.choices[3] == question.answer)),
+                            status: (question.choices[3] == question.answer &&
+                                state))),
                   ],
                 ),
                 const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: ElevatedButton(
-                    onPressed: _showAnswer,
-                    child: const Text('Show Answer'),
-                  ),
-                )
               ],
             )
           ],

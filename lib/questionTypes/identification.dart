@@ -4,10 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class IdentificationPage extends StatelessWidget {
   final IQuestion question;
+  final bool state;
 
-  const IdentificationPage({super.key, required this.question});
-
-  void _showAnswer() {}
+  const IdentificationPage(
+      {super.key, required this.question, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +34,12 @@ class IdentificationPage extends StatelessWidget {
             const SizedBox(height: 20),
             Center(
                 child: Text(
-              question.answer,
+              state ? question.answer : "_________________",
               style: GoogleFonts.poppins(
                 fontSize: 64,
-                color: Colors.red,
+                color: state ? Colors.red : Colors.black,
               ),
             )),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: ElevatedButton(
-                onPressed: _showAnswer,
-                child: const Text('Show Answer'),
-              ),
-            )
           ],
         ),
       ),
