@@ -118,6 +118,7 @@ class RandomizerPage extends StatefulWidget {
 class _RandomizerPageState extends State<RandomizerPage> {
   late List<Question> randomQuestions;
   int currentPage = 0;
+  String round = "Easy";
 
   @override
   void initState() {
@@ -150,26 +151,51 @@ class _RandomizerPageState extends State<RandomizerPage> {
                 Expanded(
                   child: Row(
                     children: [
-                      (() {
-                        if (selectedPage == "mc") {
-                          return Expanded(
-                              child: MultipleChoicePage(
-                                  question: randomQuestions[currentPage]
-                                      as MCQuestion));
-                        } else if (selectedPage == "tf") {
-                          return Expanded(
-                              child: TrueOrFalsePage(
-                                  question: randomQuestions[currentPage]
-                                      as TFQuestion));
-                        } else if (selectedPage == "id") {
-                          return Expanded(
-                              child: IdentificationPage(
-                                  question: randomQuestions[currentPage]
-                                      as IQuestion));
-                        } else {
-                          return Container();
-                        }
-                      })(),
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 24.0, horizontal: 28.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '$round round',
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                'Question $currentPage out of 10',
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              (() {
+                                if (selectedPage == "mc") {
+                                  return Expanded(
+                                      flex: 2,
+                                      child: MultipleChoicePage(
+                                          question: randomQuestions[currentPage]
+                                              as MCQuestion));
+                                } else if (selectedPage == "tf") {
+                                  return Expanded(
+                                      flex: 2,
+                                      child: TrueOrFalsePage(
+                                          question: randomQuestions[currentPage]
+                                              as TFQuestion));
+                                } else if (selectedPage == "id") {
+                                  return Expanded(
+                                      flex: 2,
+                                      child: IdentificationPage(
+                                          question: randomQuestions[currentPage]
+                                              as IQuestion));
+                                } else {
+                                  return Container();
+                                }
+                              })(),
+                            ],
+                          ),
+                        ),
+                      ),
                       Expanded(
                         flex: 1,
                         child: Container(
@@ -189,9 +215,6 @@ class _RandomizerPageState extends State<RandomizerPage> {
                       ElevatedButton(
                         onPressed: currentPage > 0
                             ? () {
-                                // _pageController.previousPage(
-                                //     duration: Duration(milliseconds: 300),
-                                //     curve: Curves.easeInOut);
                                 setState(() {
                                   currentPage--;
                                 });
@@ -205,16 +228,21 @@ class _RandomizerPageState extends State<RandomizerPage> {
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                // _pageController.animateToPage(
-                                //   i,
-                                //   duration: Duration(milliseconds: 300),
-                                //   curve: Curves.easeInOut,
-                                // );
                                 setState(() {
                                   currentPage = i;
                                 });
                               },
-                              child: Text('${i + 1}'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: currentPage == i
+                                    ? Colors.red
+                                    : Colors.white,
+                              ),
+                              child: Text(
+                                '${i + 1}',
+                                style: TextStyle(
+                                  color: currentPage == i ? Colors.white : null,
+                                ),
+                              ),
                             ),
                             const SizedBox(width: 10),
                           ],
@@ -222,9 +250,6 @@ class _RandomizerPageState extends State<RandomizerPage> {
                       ElevatedButton(
                         onPressed: currentPage < 9
                             ? () {
-                                // _pageController.nextPage(
-                                //     duration: Duration(milliseconds: 300),
-                                //     curve: Curves.easeInOut);
                                 setState(() {
                                   currentPage++;
                                 });

@@ -13,7 +13,6 @@ class TrueOrFalsePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 28.0),
         decoration: const BoxDecoration(
           color: Colors.white, // White background for the rounded rectangle
           borderRadius: BorderRadius.only(
@@ -24,15 +23,6 @@ class TrueOrFalsePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Easy Round',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Question 1 out of 10',
-              style: TextStyle(fontSize: 14),
-            ),
             const SizedBox(height: 5),
             Text(
               question.questionText,
@@ -41,23 +31,16 @@ class TrueOrFalsePage extends StatelessWidget {
             const SizedBox(height: 20),
             Column(
               children: [
-                const Row(
+                Row(
                   children: [
-                    Expanded(
-                        child: ChoiceBox(text: 'A. Apollo 10', status: true)),
                     Expanded(
                         child: ChoiceBox(
-                      text: "B. Apollo 11",
-                      status: false,
+                            text: 'True', status: true == question.answer)),
+                    Expanded(
+                        child: ChoiceBox(
+                      text: "False",
+                      status: false == question.answer,
                     )),
-                  ],
-                ),
-                const Row(
-                  children: [
-                    Expanded(
-                        child: ChoiceBox(text: "C. Apollo 11", status: true)),
-                    Expanded(
-                        child: ChoiceBox(text: "D. Apollo 12", status: true)),
                   ],
                 ),
                 const SizedBox(height: 20),
