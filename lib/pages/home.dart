@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'edit_page.dart';
 import 'randomizer.dart';
+import '../components/button.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -28,17 +29,18 @@ class Home extends StatelessWidget {
                   style: TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
+                Button(
+                  buttonText: 'Edit Questions',
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const EditPage()),
                     );
                   },
-                  child: const Text('Edit Page'),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
+                Button(
+                  buttonText: 'Start Quiz',
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -46,7 +48,6 @@ class Home extends StatelessWidget {
                           builder: (context) => const RandomizerPage()),
                     );
                   },
-                  child: const Text('Start Quiz'),
                 ),
               ],
             ),

@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CountdownApp extends StatelessWidget {
+  const CountdownApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: CountdownTimer(),
       ),
@@ -13,7 +16,10 @@ class CountdownApp extends StatelessWidget {
 }
 
 class CountdownTimer extends StatefulWidget {
+  const CountdownTimer({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _CountdownTimerState createState() => _CountdownTimerState();
 }
 
@@ -81,13 +87,19 @@ class _CountdownTimerState extends State<CountdownTimer> {
         children: [
           Text(
             _formatTime(_secondsLeft),
-            style: TextStyle(fontSize: 64),
+            style: const TextStyle(fontSize: 64),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           if (!_isRunning)
             ElevatedButton(
               onPressed: _startTimer,
-              child: Text('Start'),
+              child: Text(
+                'Start',
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
             ),
           if (_isRunning)
             Row(
@@ -95,12 +107,24 @@ class _CountdownTimerState extends State<CountdownTimer> {
               children: [
                 ElevatedButton(
                   onPressed: _pauseTimer,
-                  child: Text('Pause'),
+                  child: Text(
+                    'Pause',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: _resetTimer,
-                  child: Text('Reset'),
+                  child: Text(
+                    'Reset',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ],
             ),

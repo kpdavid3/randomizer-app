@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './pages/home.dart';
 import './pages/randomizer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import './components/button.dart';
 
 // import 'dart:async';
 void main() {
@@ -73,7 +74,8 @@ class LockScreenPage extends StatelessWidget {
                       ]),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
+                Button(
+                  buttonText: "Enter",
                   onPressed: () {
                     if (passwordController.text == correctPassword) {
                       Navigator.push(
@@ -113,13 +115,6 @@ class LockScreenPage extends StatelessWidget {
                       );
                     }
                   },
-                  child: Text(
-                    'Enter',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
                 ),
               ],
             ),

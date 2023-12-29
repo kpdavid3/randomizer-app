@@ -6,6 +6,7 @@ import '../questionTypes/true_or_false.dart';
 import '../classes/questions.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
+import '../components/button.dart';
 
 List<Question> allQuestions = [
   MCQuestion(
@@ -203,13 +204,13 @@ class _RandomizerPageState extends State<RandomizerPage> {
                               })(),
                               Align(
                                 alignment: Alignment.centerLeft,
-                                child: ElevatedButton(
+                                child: Button(
+                                  buttonText: 'Show Answer',
                                   onPressed: () {
                                     setState(() {
                                       questionState = !questionState;
                                     });
                                   },
-                                  child: const Text('Show Answer'),
                                 ),
                               )
                             ],
@@ -219,8 +220,13 @@ class _RandomizerPageState extends State<RandomizerPage> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          color: Colors.white,
-                          child: CountdownApp(),
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .white, // White background for the rounded rectangle
+                            borderRadius:
+                                BorderRadius.circular(20), // Set border radius
+                          ),
+                          child: const CountdownApp(),
                         ),
                       ),
                     ],
@@ -228,7 +234,12 @@ class _RandomizerPageState extends State<RandomizerPage> {
                 ),
                 Container(
                   height: 100.0,
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: Colors
+                        .white, // White background for the rounded rectangle
+                    borderRadius:
+                        BorderRadius.circular(20), // Set border radius
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
