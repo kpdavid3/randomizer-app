@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'edit_page.dart';
-import 'instruction_page.dart';
+import 'randomizer.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -43,7 +43,7 @@ class Home extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const InstructionsPage()),
+                          builder: (context) => const RandomizerPage()),
                     );
                   },
                   child: const Text('Start Quiz'),

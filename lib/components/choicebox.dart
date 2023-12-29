@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChoiceBox extends StatelessWidget {
   final String text;
@@ -16,7 +17,7 @@ class ChoiceBox extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: status ? Colors.red : Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -29,23 +30,12 @@ class ChoiceBox extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // ChoiceBox(text: text, status: true), // Embed CustomWidget here
-          const SizedBox(height: 16.0), // Add some spacing if needed
           Text(
             text,
-            style: status
-                ? const TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight
-                        .bold, // Change to your desired style for true status
-                    color: Colors
-                        .green, // Change to your desired color for true status
-                  )
-                : const TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.black,
-                  ),
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              color: status ? Colors.white : Colors.black,
+            ),
             textAlign: TextAlign.center,
           ),
         ],

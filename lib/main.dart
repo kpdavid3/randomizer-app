@@ -74,8 +74,7 @@ class LockScreenPage extends StatelessWidget {
                     if (passwordController.text == correctPassword) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const RandomizerPage()),
+                        MaterialPageRoute(builder: (context) => const Home()),
                       );
                     } else {
                       // Show an error message or handle incorrect password
