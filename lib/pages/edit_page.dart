@@ -4,7 +4,7 @@ import 'package:excel/excel.dart';
 import 'dart:io';
 
 import 'package:randomizer_app/classes/questions.dart';
-import 'package:randomizer_app/global_data.dart'; // Import GlobalData
+import 'package:randomizer_app/global_data.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -14,9 +14,9 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-  String? selectedFilePath;
+  Map<String, String?> selectedFilePaths = {};
 
-  Future<void> selectFile() async {
+  Future<void> selectFile(String difficulty) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx'],
@@ -26,16 +26,14 @@ class _EditPageState extends State<EditPage> {
       String? filePath = result.files.single.path;
       if (filePath != null) {
         setState(() {
-          selectedFilePath = filePath;
+          selectedFilePaths[difficulty] = filePath;
         });
-        GlobalData().selectedFilePath = filePath;
-        
-        await loadQuestionsFromExcel(filePath);
+        await loadQuestionsFromExcel(filePath, difficulty);
       }
     }
   }
 
-  Future<void> loadQuestionsFromExcel(String filePath) async {
+  Future<void> loadQuestionsFromExcel(String filePath, String difficulty) async {
     try {
       var bytes = File(filePath).readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
@@ -44,10 +42,10 @@ class _EditPageState extends State<EditPage> {
       for (var table in excel.tables.keys) {
         for (var row in excel.tables[table]!.rows) {
           if (row[0]?.value != null && row[0]?.value != 'Type of Question') {
-            String type = row[0]?.value.toString() ?? ''; // Safely access the string value
+            String type = row[0]?.value.toString() ?? '';
             String questionText = row[1]?.value.toString() ?? '';
             dynamic answer;
-            // Answers are located at row 6
+
             if (type == 'mc') {
               answer = row[6]?.value.toString() ?? '';
               List<String> choices = [
@@ -68,10 +66,30 @@ class _EditPageState extends State<EditPage> {
         }
       }
 
-      GlobalData().allQuestions = loadedQuestions;
+      GlobalData().updateQuestions(loadedQuestions, difficulty);
     } catch (e) {
       print("Error loading Excel file: $e");
     }
+  }
+
+  Widget filePickerButton(String difficulty) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ElevatedButton(
+        onPressed: () => selectFile(difficulty),
+        child: Text('Select Excel File for $difficulty Questions'),
+      ),
+    );
+  }
+
+  Widget fileInfoText(String? filePath, String difficulty) {
+    if (filePath != null) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Text('Selected $difficulty file: $filePath'),
+      );
+    }
+    return SizedBox.shrink(); // Returns an empty widget if filePath is null
   }
 
   @override
@@ -80,16 +98,25 @@ class _EditPageState extends State<EditPage> {
       appBar: AppBar(
         title: const Text('Edit Page'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ElevatedButton(
-              onPressed: selectFile,
-              child: const Text('Select Excel File'),
-            ),
-            if (selectedFilePath != null) Text('Selected file: $selectedFilePath'),
-            // Additional UI elements...
+            filePickerButton('Easy'),
+            fileInfoText(selectedFilePaths['Easy'], 'Easy'),
+
+            filePickerButton('Average'),
+            fileInfoText(selectedFilePaths['Average'], 'Average'),
+
+            filePickerButton('Difficult'),
+            fileInfoText(selectedFilePaths['Difficult'], 'Difficult'),
+
+            filePickerButton('Clincher'),
+            fileInfoText(selectedFilePaths['Clincher'], 'Clincher'),
+
+            // Additional UI elements as needed...
           ],
         ),
       ),

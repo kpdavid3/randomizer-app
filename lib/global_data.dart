@@ -3,20 +3,33 @@ import './classes/questions.dart';
 class GlobalData {
   static final GlobalData _singleton = GlobalData._internal();
 
-  // Declare the fields you need
-  String? selectedFilePath;
-  List<Question>? allQuestions;
+  // Declare fields for each difficulty level
+  List<Question>? easyQuestions;
+  List<Question>? averageQuestions;
+  List<Question>? difficultQuestions;
+  List<Question>? clincherQuestions;
 
-  // Private constructor
   GlobalData._internal();
 
-  // Factory constructor for singleton instance
   factory GlobalData() {
     return _singleton;
   }
 
-  // Method to update questions
-  void updateQuestions(List<Question> questions) {
-    allQuestions = questions;
+  // Method to update questions based on difficulty
+  void updateQuestions(List<Question> questions, String difficulty) {
+    switch (difficulty) {
+      case 'Easy':
+        easyQuestions = questions;
+        break;
+      case 'Average':
+        averageQuestions = questions;
+        break;
+      case 'Difficult':
+        difficultQuestions = questions;
+        break;
+      case 'Clincher':
+        clincherQuestions = questions;
+        break;
+    }
   }
 }

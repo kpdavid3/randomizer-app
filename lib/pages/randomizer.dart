@@ -26,7 +26,7 @@ class _RandomizerPageState extends State<RandomizerPage> {
   void initState() {
     super.initState();
     // Fetch questions from GlobalData
-    randomQuestions = getRandomQuestions(GlobalData().allQuestions ?? [], 10);
+    randomQuestions = getRandomQuestions(GlobalData().easyQuestions ?? [], 10);
   }
 
   List<Question> getRandomQuestions(List<Question> questions, int count) {
