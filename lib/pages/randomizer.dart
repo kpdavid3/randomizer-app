@@ -21,12 +21,43 @@ class _RandomizerPageState extends State<RandomizerPage> {
   int currentPage = 0;
   bool questionState = false;
   String round = "Easy";
+  final List<String> difficultyLevels = ["Easy", "Average", "Difficult", "Clincher"];
+  int difficultyIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    // Fetch questions from GlobalData
-    randomQuestions = getRandomQuestions(GlobalData().easyQuestions ?? [], 10);
+    loadQuestionsForDifficulty(round);
+  }
+
+  void loadQuestionsForDifficulty(String difficulty) {
+    List<Question>? questions;
+    switch (difficulty) {
+      case "Easy":
+        questions = GlobalData().easyQuestions;
+        break;
+      case "Average":
+        questions = GlobalData().averageQuestions;
+        break;
+      case "Difficult":
+        questions = GlobalData().difficultQuestions;
+        break;
+      case "Clincher":
+        questions = GlobalData().clincherQuestions;
+        break;
+    }
+    setState(() {
+      randomQuestions = getRandomQuestions(questions ?? [], 10);
+      currentPage = 0;
+      round = difficulty;
+    });
+  }
+
+  void advanceDifficulty() {
+    if (difficultyIndex < difficultyLevels.length - 1) {
+      difficultyIndex++;
+      loadQuestionsForDifficulty(difficultyLevels[difficultyIndex]);
+    }
   }
 
   List<Question> getRandomQuestions(List<Question> questions, int count) {
@@ -170,14 +201,13 @@ class _RandomizerPageState extends State<RandomizerPage> {
                           )),
                       ),
                       ElevatedButton(
-                        onPressed: currentPage < 9
-                            ? () {
-                                setState(() {
-                                  currentPage++;
-                                  questionState = false;
-                                });
-                              }
-                            : null,
+                        onPressed: () {
+                          if (currentPage < 9) {
+                            setState(() => currentPage++);
+                          } else {
+                            advanceDifficulty();
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.pink,
                         ),
