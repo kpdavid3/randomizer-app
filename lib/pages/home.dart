@@ -61,7 +61,7 @@ class Home extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const RandomizerPage()),
+                          builder: (context) => RandomizerPage()),
                     );
                   },
                 ),
