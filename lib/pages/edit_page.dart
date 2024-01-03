@@ -16,6 +16,19 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
   Map<String, String?> selectedFilePaths = {};
 
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with existing file paths from GlobalData
+    var globalData = GlobalData();
+    selectedFilePaths = {
+      'Easy': globalData.easyQuestionsFilePath,
+      'Average': globalData.averageQuestionsFilePath,
+      'Difficult': globalData.difficultQuestionsFilePath,
+      'Clincher': globalData.clincherQuestionsFilePath,
+    };
+  }
+
   Future<void> selectFile(String difficulty) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -32,7 +45,6 @@ class _EditPageState extends State<EditPage> {
       }
     }
   }
-
 
   Future<void> loadQuestionsFromExcel(String filePath, String difficulty) async {
     try {
@@ -68,71 +80,60 @@ class _EditPageState extends State<EditPage> {
       }
 
       GlobalData().updateQuestions(loadedQuestions, difficulty);
+      GlobalData().updateFilePath(filePath, difficulty); // Update file path
     } catch (e) {
       print("Error loading Excel file: $e");
     }
   }
 
   Widget filePickerButton(String label) {
-    String buttonText = 'Select Spreadsheet';
+    String buttonText = selectedFilePaths[label] ?? 'Select Spreadsheet';
     
     if (selectedFilePaths[label] != null) {
       var filePath = selectedFilePaths[label]!;
-      var fileName = filePath.split('/').last; // Extracts the file name
-      var folderName = filePath.split('/')..removeLast(); // Extracts the folder path
-      buttonText = '${folderName.join('/')}/$fileName'; // Combines folder path and file name
+      var fileName = filePath.split('/').last;
+      buttonText = fileName; // Show only file name
     }
 
     return ElevatedButton(
       onPressed: () => selectFile(label),
       child: Text(buttonText),
       style: ElevatedButton.styleFrom(
-        minimumSize: Size(double.infinity, 36), // makes button wide
+        minimumSize: Size(double.infinity, 36),
       ),
     );
   }
 
-
   Widget fileSelectionSection(String difficulty) {
-      return Card(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Select $difficulty Questions:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              filePickerButton(difficulty),
-              SizedBox(height: 10),
-              // fileInfoText(selectedFilePaths[difficulty], difficulty),
-            ],
-          ),
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Select $difficulty Questions:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            filePickerButton(difficulty),
+            SizedBox(height: 10),
+          ],
         ),
-      );
-    }
+      ),
+    );
+  }
 
-
-
-  // Display Full path
-  // Widget fileInfoText(String? filePath, String difficulty) {
-  //   return filePath != null
-  //       ? Text('Selected file: $filePath')
-  //       : Container(); // Returns an empty container if filePath is null
-  // }
-
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Page'),
       ),
-      body: Center( // Centering the content
+      body: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600), // Set a maximum width
+          constraints: BoxConstraints(maxWidth: 600),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -140,7 +141,6 @@ class _EditPageState extends State<EditPage> {
                 fileSelectionSection('Average'),
                 fileSelectionSection('Difficult'),
                 fileSelectionSection('Clincher'),
-                // Additional UI elements...
               ],
             ),
           ),
@@ -149,4 +149,3 @@ class _EditPageState extends State<EditPage> {
     );
   }
 }
-
