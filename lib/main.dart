@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './pages/home.dart';
+import './pages/edit_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './components/button.dart';
 
@@ -82,7 +83,8 @@ class LockScreenPage extends StatelessWidget {
                     if (passwordController.text == correctPassword) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Home()),
+                        MaterialPageRoute(
+                            builder: (context) => const EditPage()),
                       );
                     } else {
                       // Show an error message or handle incorrect password
