@@ -3,6 +3,7 @@ import './pages/home.dart';
 import './pages/edit_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './components/button.dart';
+import './pages/questionPage.dart';
 
 // import 'dart:async';
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LockScreenPage(),
+      home: const QuestionPage(),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'edit_page.dart';
 import 'randomizer.dart';
@@ -12,38 +13,43 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
+  Map<String, String?> selectedFilePaths = {};
   @override
   void initState() {
     super.initState();
-    loadDefaultQuestions();
+    // Initialize with existing file paths from GlobalData
+    var globalData = GlobalData();
+    selectedFilePaths = {
+      'Easy': globalData.easyQuestionsFilePath,
+      'Average': globalData.averageQuestionsFilePath,
+      'Difficult': globalData.difficultQuestionsFilePath,
+      'Clincher': globalData.clincherQuestionsFilePath,
+    };
   }
 
-  void loadDefaultQuestions() async {
-    Map<String, String> fileNames = {
-      'Easy': 'easy_questions.xlsx',
-      'Average': 'average_questions.xlsx',
-      'Difficult': 'difficult_questions.xlsx',
-      'Clincher': 'clincher_questions.xlsx',
-    };
+  Future<void> selectFile(String difficulty) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xlsx'],
+    );
 
-    String currentDirectory = Directory.current.path;
-
-    for (var entry in fileNames.entries) {
-      String filePath = '$currentDirectory/${entry.value}';
-
-      if (File(filePath).existsSync()) {
-        await loadQuestionsFromExcel(filePath, entry.key);
-      } else {
-        print("${entry.value} not found in the current directory");
+    if (result != null) {
+      String? filePath = result.files.single.path;
+      if (filePath != null) {
+        setState(() {
+          selectedFilePaths[difficulty] = filePath;
+        });
+        await loadQuestionsFromExcel(filePath, difficulty);
       }
     }
   }
 
-  Future<void> loadQuestionsFromExcel(String filePath, String difficulty) async {
+  Future<void> loadQuestionsFromExcel(
+      String filePath, String difficulty) async {
     try {
       var bytes = File(filePath).readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
@@ -59,18 +65,24 @@ class _HomeState extends State<Home> {
             if (type == 'mc') {
               answer = row[6]?.value.toString() ?? '';
               List<String> choices = [
-                row[2]?.value.toString() ?? '', 
-                row[3]?.value.toString() ?? '', 
-                row[4]?.value.toString() ?? '', 
+                row[2]?.value.toString() ?? '',
+                row[3]?.value.toString() ?? '',
+                row[4]?.value.toString() ?? '',
                 row[5]?.value.toString() ?? ''
               ];
-              loadedQuestions.add(MCQuestion(questionText: questionText, choices: choices, answer: answer, type: type));
+              loadedQuestions.add(MCQuestion(
+                  questionText: questionText,
+                  choices: choices,
+                  answer: answer,
+                  type: type));
             } else if (type == 'tf') {
               answer = (row[6]?.value.toString() ?? '').toLowerCase() == 'true';
-              loadedQuestions.add(TFQuestion(questionText: questionText, answer: answer, type: type));
+              loadedQuestions.add(TFQuestion(
+                  questionText: questionText, answer: answer, type: type));
             } else if (type == 'id') {
               answer = row[6]?.value.toString() ?? '';
-              loadedQuestions.add(IQuestion(questionText: questionText, answer: answer, type: type));
+              loadedQuestions.add(IQuestion(
+                  questionText: questionText, answer: answer, type: type));
             }
           }
         }
@@ -81,6 +93,37 @@ class _HomeState extends State<Home> {
     } catch (e) {
       print("Error loading Excel file: $e");
     }
+  }
+
+  Widget filePickerButton(String label) {
+    String buttonText = selectedFilePaths[label] ?? label;
+
+    if (selectedFilePaths[label] != null) {
+      var filePath = selectedFilePaths[label]!;
+      var fileName = filePath.split('/').last;
+      buttonText = fileName; // Show only file name
+    }
+
+    return Expanded(
+        child:
+            Button(buttonText: buttonText, onPressed: () => selectFile(label)));
+  }
+
+  Widget fileSelectionSection(String difficulty) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Text(
+        //   'Select Spreadsheet:',
+        //   style: GoogleFonts.poppins(
+        //     color: Colors.black54,
+        //     fontSize: 18,
+        //   ),
+        // ),
+        const SizedBox(width: 10),
+        filePickerButton(difficulty),
+      ],
+    );
   }
 
   @override
@@ -103,7 +146,7 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/logo.png', // Update with your actual logo path
+                  'assets/logo2.png', // Update with your actual logo path
                   height: 200,
                 ),
                 Text(
@@ -142,18 +185,38 @@ class _HomeState extends State<Home> {
                   },
                 ),
                 const SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Back',
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      color: Colors.black,
-                    ),
+                // TextButton(
+                //   onPressed: () {
+                //     Navigator.pop(context);
+                //   },
+                //   child: Text(
+                //     'Back',
+                //     style: GoogleFonts.poppins(
+                //       fontSize: 12,
+                //       color: Colors.black,
+                //     ),
+                //   ),
+                // ),
+                Spacer(),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(32, 0, 32, 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: fileSelectionSection('Easy'),
+                      ),
+                      Expanded(
+                        child: fileSelectionSection('Average'),
+                      ),
+                      Expanded(
+                        child: fileSelectionSection('Difficult'),
+                      ),
+                      Expanded(
+                        child: fileSelectionSection('Clincher'),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
             ),
           ),

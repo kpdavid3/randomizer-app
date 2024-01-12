@@ -13,11 +13,9 @@ class MultipleChoicePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white, // White background for the rounded rectangle
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-          ),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
