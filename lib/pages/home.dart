@@ -7,6 +7,8 @@ import 'dart:io';
 import 'package:excel/excel.dart';
 import '../classes/questions.dart';
 import '../global_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,21 +18,29 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  Map<String, String?> selectedFilePaths = {};
+  String? selectedFilePath;
+
   @override
   void initState() {
     super.initState();
     // Initialize with existing file paths from GlobalData
-    var globalData = GlobalData();
-    selectedFilePaths = {
-      'Easy': globalData.easyQuestionsFilePath,
-      'Average': globalData.averageQuestionsFilePath,
-      'Difficult': globalData.difficultQuestionsFilePath,
-      'Clincher': globalData.clincherQuestionsFilePath,
-    };
+    _loadFilePath();
   }
 
-  String? selectedFilePath;
+  Future<void> _loadFilePath() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? filePath = prefs.getString('questionsFilePath');
+
+    if (filePath != null) {
+      print("ANG FILE PATH AY: ${filePath}");
+      setState(() {
+        selectedFilePath = filePath;
+      });
+      // Load questions from Excel if file path is available
+      await loadQuestionsFromExcel(filePath);
+    }
+  }
+
 
   Future<void> selectFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -107,6 +117,9 @@ Future<void> loadQuestionsFromExcel(String filePath) async {
     printFirstQuestionAnswer('average', GlobalData().averageQuestions);
     printFirstQuestionAnswer('difficult', GlobalData().difficultQuestions);
     printFirstQuestionAnswer('clincher', GlobalData().clincherQuestions);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('questionsFilePath', filePath);
   } catch (e) {
     print("Error loading Excel file: $e");
   }
@@ -159,12 +172,12 @@ void printFirstQuestionAnswer(String difficulty, List<Question>? questions) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    String buttonText = selectedFilePaths["Select Questions"] ?? "Select Questions";
-
-    if (selectedFilePaths["Select Questions"] != null) {
-      var filePath = selectedFilePaths["Select Questions"]!;
-      var fileName = filePath.split('/').last;
-      buttonText = fileName; // Show only file name
+    String buttonText;
+    if (selectedFilePath != null) {
+        var fileName = selectedFilePath!.split('/').last;
+        buttonText = fileName; // Show only file name
+    } else {
+        buttonText = "Select Questions";
     }
 
     return Scaffold(
@@ -209,6 +222,7 @@ void printFirstQuestionAnswer(String difficulty, List<Question>? questions) {
                 Button(
                   buttonText: 'Start Quiz',
                   onPressed: () {
+                    loadQuestionsFromExcel(selectedFilePath!);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => RandomizerPage()),

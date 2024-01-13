@@ -8,10 +8,7 @@ class GlobalData {
   List<Question>? difficultQuestions;
   List<Question>? clincherQuestions;
 
-  String? easyQuestionsFilePath;
-  String? averageQuestionsFilePath;
-  String? difficultQuestionsFilePath;
-  String? clincherQuestionsFilePath;
+  String? questionsFilePath; // Single file path for all difficulties
 
   factory GlobalData() {
     return _singleton;
@@ -36,20 +33,7 @@ class GlobalData {
     }
   }
 
-  void updateFilePath(String filePath, String difficulty) {
-    switch (difficulty) {
-      case 'Easy':
-        easyQuestionsFilePath = filePath;
-        break;
-      case 'Average':
-        averageQuestionsFilePath = filePath;
-        break;
-      case 'Difficult':
-        difficultQuestionsFilePath = filePath;
-        break;
-      case 'Clincher':
-        clincherQuestionsFilePath = filePath;
-        break;
-    }
+  void updateFilePath(String filePath) {
+    questionsFilePath = filePath; // Update single file path
   }
 }

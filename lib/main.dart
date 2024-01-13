@@ -85,7 +85,8 @@ class LockScreenPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditPage()),
+                            // builder: (context) => const EditPage()),
+                            builder: (context) => const Home()),
                       );
                     } else {
                       // Show an error message or handle incorrect password
