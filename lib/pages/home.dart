@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:randomizer_app/pages/questionPage.dart';
 import 'randomizer.dart';
 import '../components/button.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -168,23 +169,6 @@ class HomeState extends State<Home> {
     return "Select Questions";
   }
 
-  // Widget fileSelectionSection(String difficulty) {
-  //   return Row(
-  //     crossAxisAlignment: CrossAxisAlignment.center,
-  //     children: [
-  //       // Text(
-  //       //   'Select Spreadsheet:',
-  //       //   style: GoogleFonts.poppins(
-  //       //     color: Colors.black54,
-  //       //     fontSize: 18,
-  //       //   ),
-  //       // ),
-  //       const SizedBox(width: 10),
-  //       filePickerButton(difficulty),
-  //     ],
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -243,7 +227,8 @@ class HomeState extends State<Home> {
                     loadQuestionsFromExcel(selectedFilePath!);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RandomizerPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const QuestionPage()),
                     );
                   },
                 ),

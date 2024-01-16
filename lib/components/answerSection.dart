@@ -3,10 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:randomizer_app/classes/questions.dart';
-import 'package:randomizer_app/components/countdown.dart';
-import 'package:randomizer_app/questionTypes/identification.dart';
-import 'package:randomizer_app/questionTypes/multiple_choice.dart';
-import 'package:randomizer_app/questionTypes/true_or_false.dart';
 
 class AnswerPage extends StatelessWidget {
   final int currentPage;
@@ -59,23 +55,6 @@ class AnswerPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              // () {
-              //   if (selectedPage == "mc") {
-              //     return (randomQuestions[currentPage] as MCQuestion)
-              //         .explanation
-
-              //   } else if (selectedPage == "tf") {
-              //     return (randomQuestions[currentPage] as TFQuestion)
-              //         .explanation
-
-              //   } else if (selectedPage == "id") {
-              //     return (randomQuestions[currentPage] as IQuestion)
-              //         .explanation
-
-              //   } else {
-              //     return "";
-              //   }
-              // }(),
               randomQuestions[currentPage].explanation,
               style: GoogleFonts.montserrat(
                 color: const Color(0xFF333333),

@@ -4,13 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:randomizer_app/components/answerSection.dart';
 import 'package:randomizer_app/components/questionSection.dart';
 import '../components/countdown.dart';
-import '../questionTypes/identification.dart';
-import '../questionTypes/multiple_choice.dart';
-import '../questionTypes/true_or_false.dart';
 import '../classes/questions.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
-import '../components/button.dart';
 import 'package:flutter/services.dart';
 
 List<Question> allQuestions = [

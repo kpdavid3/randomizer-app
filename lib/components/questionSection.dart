@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:randomizer_app/classes/questions.dart';
-import 'package:randomizer_app/components/countdown.dart';
 import 'package:randomizer_app/questionTypes/identification.dart';
 import 'package:randomizer_app/questionTypes/multiple_choice.dart';
 import 'package:randomizer_app/questionTypes/true_or_false.dart';
