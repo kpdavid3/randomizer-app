@@ -23,6 +23,7 @@ class IdentificationPage extends StatelessWidget {
               color: const Color(0xFF333333),
               fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
