@@ -11,61 +11,64 @@ class MultipleChoicePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(height: 5),
+        Text(
+          question.questionText,
+          style: GoogleFonts.montserrat(
+            fontSize: 24,
+            color: const Color(0xFF333333),
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 5),
-            Text(
-              question.questionText,
-              style: GoogleFonts.poppins(
-                fontSize: 24,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                Row(
+        const SizedBox(height: 20),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Row(
                   children: [
                     Expanded(
                         child: ChoiceBox(
-                            text: question.choices[0],
-                            status: (question.choices[0] == question.answer &&
-                                state))),
+                      text: question.choices[0],
+                      type: "mc",
+                      letter: "A.",
+                    )),
                     Expanded(
                         child: ChoiceBox(
                       text: question.choices[1],
-                      status: (question.choices[1] == question.answer && state),
+                      type: "mc",
+                      letter: "B.",
                     )),
                   ],
                 ),
-                Row(
+              ),
+              Expanded(
+                child: Row(
                   children: [
                     Expanded(
                         child: ChoiceBox(
-                            text: question.choices[2],
-                            status: (question.choices[2] == question.answer &&
-                                state))),
+                      text: question.choices[2],
+                      type: "mc",
+                      letter: "C.",
+                    )),
                     Expanded(
                         child: ChoiceBox(
                             text: question.choices[3],
-                            status: (question.choices[3] == question.answer &&
-                                state))),
+                            type: "mc",
+                            letter: "D.")),
                   ],
                 ),
-                const SizedBox(height: 20),
-              ],
-            )
-          ],
-        ),
-      ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

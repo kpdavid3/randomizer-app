@@ -14,47 +14,53 @@ class TrueOrFalsePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(height: 5),
+        Text(
+          question.questionText,
+          style: GoogleFonts.montserrat(
+            fontSize: 24,
+            color: const Color(0xFF333333),
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 5),
-            Text(
-              question.questionText,
-              style: GoogleFonts.poppins(
-                fontSize: 24,
-                color: Colors.black,
+        const Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                          child: ChoiceBox(
+                        text: 'True',
+                        type: "tf",
+                        letter: "",
+                      )),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: ChoiceBox(
+                        text: 'False',
+                        type: "tf",
+                        letter: "",
+                      )),
+                    ],
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                        child: ChoiceBox(
-                      text: 'True',
-                      status: (true == question.answer && state),
-                    )),
-                    Expanded(
-                        child: ChoiceBox(
-                      text: "False",
-                      status: (false == question.answer && state),
-                    )),
-                  ],
-                ),
-                const SizedBox(height: 20),
-              ],
-            )
-          ],
-        ),
-      ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

@@ -152,6 +152,22 @@ class _RandomizerPageState extends State<QuestionPage> {
     _timer = Timer.periodic(const Duration(seconds: 1), _updateTimer);
   }
 
+  void _pauseTimer() {
+    setState(() {
+      _timer.cancel();
+      _isRunning = false;
+      _secondsLeft = 60;
+    });
+  }
+
+  void _resetTimer() {
+    setState(() {
+      _timer.cancel();
+      _isRunning = false;
+      _secondsLeft = 60;
+    });
+  }
+
   void nextPage() {
     setState(() {
       currentPage++;
@@ -174,18 +190,27 @@ class _RandomizerPageState extends State<QuestionPage> {
       autofocus: true,
       focusNode: FocusNode(),
       onKey: (RawKeyEvent event) {
-        if (currentPage != 0 &&
-            event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-          print("left");
-          prevPage();
+        if (_isRunning == false) {
+          if (_secondsLeft != 0 &&
+              event.isKeyPressed(LogicalKeyboardKey.enter)) {
+            _startTimer();
+          }
+          if (currentPage != 0 &&
+              event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+            prevPage();
+          }
+          if (currentPage != 9 &&
+              event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+            nextPage();
+          }
         }
-        if (currentPage != 9 &&
-            event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-          print("right");
-          nextPage();
+        if (_isRunning == true &&
+            _secondsLeft != 0 &&
+            event.isKeyPressed(LogicalKeyboardKey.keyP)) {
+          _pauseTimer();
         }
-        if (_secondsLeft != 0 && event.isKeyPressed(LogicalKeyboardKey.enter)) {
-          _startTimer();
+        if (event.isKeyPressed(LogicalKeyboardKey.keyR)) {
+          _resetTimer();
         }
       },
       child: Scaffold(
@@ -212,25 +237,24 @@ class _RandomizerPageState extends State<QuestionPage> {
                     gradient: const LinearGradient(
                       colors: [
                         Colors.yellow,
-                        Color(0xffad9c00),
+                        Color(0xFF333333),
                         Colors.yellow,
                         Colors.white,
                         Colors.yellow,
-                        Color(0xffad9c00),
+                        Color(0xFF333333),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Container(
                     width: screenWidth * 0.9,
                     height: screenHeight * 0.85,
                     decoration: BoxDecoration(
                       image: const DecorationImage(
-                        image: AssetImage(
-                            'assets/background.png'), // Replace with your image asset
+                        image: AssetImage('assets/background.png'),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(20),
@@ -239,20 +263,30 @@ class _RandomizerPageState extends State<QuestionPage> {
                     child: Column(
                       children: [
                         Expanded(
-                            flex: 3,
+                            flex: 2,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Text("Logo Left"),
+                                Image.asset(
+                                  'assets/logo2.png', // Update with your actual logo path
+                                  height: 500,
+                                ),
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20),
+                                    color: const Color(0xFFD4AD52),
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: const Color(0xFF333333),
+                                      width: 10,
+                                    ),
                                   ),
+                                  width: 600,
+                                  height: 150,
                                   padding:
-                                      const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
@@ -268,14 +302,24 @@ class _RandomizerPageState extends State<QuestionPage> {
                                             return "";
                                         }
                                       }(),
-                                          style: const TextStyle(fontSize: 36)),
-                                      CountdownTimer(secondsLeft: _secondsLeft)
+                                          style: GoogleFonts.montserrat(
+                                            color: Colors.white,
+                                            fontSize: 48,
+                                            fontWeight: FontWeight.bold,
+                                          )),
                                     ],
                                   ),
                                 ),
-                                Text("Logo Left"),
+                                Image.asset(
+                                  'assets/logo2.png', // Update with your actual logo path
+                                  height: 500,
+                                ),
                               ],
                             )),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        CountdownTimer(secondsLeft: _secondsLeft),
                         Expanded(
                           flex: 6,
                           child: Row(
@@ -294,22 +338,6 @@ class _RandomizerPageState extends State<QuestionPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      // Text(
-                                      //   '$round round',
-                                      //   style: GoogleFonts.poppins(
-                                      //     fontSize: 24,
-                                      //     color: Colors.red,
-                                      //     fontWeight: FontWeight.bold,
-                                      //   ),
-                                      // ),
-                                      // const SizedBox(height: 5),
-                                      // Text(
-                                      //   'Question ${currentPage + 1} out of 10',
-                                      //   style: GoogleFonts.poppins(
-                                      //     fontSize: 14,
-                                      //     color: Colors.black54,
-                                      //   ),
-                                      // ),
                                       (() {
                                         if (selectedPage == "mc") {
                                           return Expanded(
@@ -338,102 +366,23 @@ class _RandomizerPageState extends State<QuestionPage> {
                                           return Container();
                                         }
                                       })(),
+                                      Row(children: [
+                                        const Spacer(),
+                                        Text(
+                                          "© QRA 2024",
+                                          style: GoogleFonts.montserrat(
+                                              color: const Color(0xFF333333),
+                                              fontSize: 12,
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                      ])
                                     ],
                                   ),
                                 ),
                               ),
-                              // Expanded(
-                              //   flex: 1,
-                              //   child: Container(
-                              //     decoration: BoxDecoration(
-                              //         color: Colors.transparent,
-                              //         borderRadius: BorderRadius.circular(20)),
-                              //     child:
-                              //         CountdownTimer(secondsLeft: _secondsLeft),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
-                        // Container(
-                        //   height: 100.0,
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.transparent,
-                        //     borderRadius: BorderRadius.circular(20),
-                        //   ),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     children: [
-                        //       ElevatedButton(
-                        //         onPressed: currentPage > 0
-                        //             ? () {
-                        //                 setState(() {
-                        //                   currentPage--;
-                        //                   questionState = false;
-                        //                 });
-                        //               }
-                        //             : null,
-                        //         style: ElevatedButton.styleFrom(
-                        //           foregroundColor: Colors.pink,
-                        //         ),
-                        //         child: const Text(
-                        //           'Prev',
-                        //           style: TextStyle(
-                        //             color: Colors.black,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       const SizedBox(width: 10),
-                        //       for (int i = 0; i < 10; i++)
-                        //         Row(
-                        //           children: [
-                        //             ElevatedButton(
-                        //               onPressed: () {
-                        //                 setState(() {
-                        //                   currentPage = i;
-                        //                   questionState = false;
-                        //                 });
-                        //               },
-                        //               style: ElevatedButton.styleFrom(
-                        //                 backgroundColor: currentPage == i
-                        //                     ? Colors.red
-                        //                     : Colors.white,
-                        //                 foregroundColor: Colors.pink,
-                        //               ),
-                        //               child: Text(
-                        //                 '${i + 1}',
-                        //                 style: TextStyle(
-                        //                   color: currentPage == i
-                        //                       ? Colors.white
-                        //                       : Colors.black,
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //             const SizedBox(width: 10),
-                        //           ],
-                        //         ),
-                        //       ElevatedButton(
-                        //         onPressed: currentPage < 9
-                        //             ? () {
-                        //                 setState(() {
-                        //                   currentPage++;
-                        //                   questionState = false;
-                        //                 });
-                        //               }
-                        //             : null,
-                        //         style: ElevatedButton.styleFrom(
-                        //           foregroundColor: Colors.pink,
-                        //         ),
-                        //         child: const Text(
-                        //           'Next',
-                        //           style: TextStyle(
-                        //             color: Colors.black,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

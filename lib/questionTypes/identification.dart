@@ -11,35 +11,20 @@ class IdentificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 5),
-            Text(
-              question.questionText,
-              style: GoogleFonts.poppins(
-                fontSize: 24,
-                color: Colors.black,
-              ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            question.questionText,
+            style: GoogleFonts.montserrat(
+              fontSize: 48,
+              color: const Color(0xFF333333),
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 20),
-            Center(
-                child: Text(
-              state ? question.answer : "_________________",
-              style: GoogleFonts.poppins(
-                fontSize: 64,
-                color: state ? Colors.red : Colors.black,
-              ),
-            )),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
