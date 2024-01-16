@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'randomizer.dart';
@@ -80,6 +82,7 @@ class HomeState extends State<Home> {
             String type = row[0]?.value.toString() ?? '';
             String questionText = row[1]?.value.toString() ?? '';
             dynamic answer;
+            String explanation = row[7]?.value.toString() ?? '';
 
             if (type == 'mc') {
               answer = row[6]?.value.toString() ?? '';
@@ -93,15 +96,22 @@ class HomeState extends State<Home> {
                   questionText: questionText,
                   choices: choices,
                   answer: answer,
-                  type: type));
+                  type: type,
+                  explanation: explanation));
             } else if (type == 'tf') {
               answer = (row[6]?.value.toString() ?? '').toLowerCase() == 'true';
               loadedQuestions.add(TFQuestion(
-                  questionText: questionText, answer: answer, type: type));
+                  questionText: questionText,
+                  answer: answer,
+                  type: type,
+                  explanation: explanation));
             } else if (type == 'id') {
               answer = row[6]?.value.toString() ?? '';
               loadedQuestions.add(IQuestion(
-                  questionText: questionText, answer: answer, type: type));
+                  questionText: questionText,
+                  answer: answer,
+                  type: type,
+                  explanation: explanation));
             }
           }
         }

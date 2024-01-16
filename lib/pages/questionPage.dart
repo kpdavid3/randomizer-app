@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:randomizer_app/components/answerSection.dart';
+import 'package:randomizer_app/components/questionSection.dart';
 import '../components/countdown.dart';
 import '../questionTypes/identification.dart';
 import '../questionTypes/multiple_choice.dart';
@@ -13,56 +15,82 @@ import 'package:flutter/services.dart';
 
 List<Question> allQuestions = [
   MCQuestion(
-      questionText: "What is the largest mammal in the world?",
-      choices: ["Elephant", "Blue Whale", "Giraffe", "Rhino"],
-      answer: "Blue Whale",
-      type: 'mc'),
+    questionText: "What is the largest mammal in the world?",
+    choices: ["Elephant", "Blue Whale", "Giraffe", "Rhino"],
+    answer: "Blue Whale",
+    type: 'mc',
+    explanation: "The blue whale is the largest mammal on Earth.",
+  ),
   MCQuestion(
-      questionText: "What do bees collect and use to create honey?",
-      choices: ["Pollen", "Dust", "Leaves", "Bark"],
-      answer: "Pollen",
-      type: 'mc'),
+    questionText: "What do bees collect and use to create honey?",
+    choices: ["Pollen", "Dust", "Leaves", "Bark"],
+    answer: "Pollen",
+    type: 'mc',
+    explanation: "Bees collect pollen to create honey.",
+  ),
   MCQuestion(
-      questionText: "Which animal is known for its ability to change color?",
-      choices: ["Chameleon", "Octopus", "Polar Bear", "Tiger"],
-      answer: "Chameleon",
-      type: 'mc'),
-  TFQuestion(questionText: "The Earth is flat.", answer: false, type: 'tf'),
+    questionText: "Which animal is known for its ability to change color?",
+    choices: ["Chameleon", "Octopus", "Polar Bear", "Tiger"],
+    answer: "Chameleon",
+    type: 'mc',
+    explanation: "Chameleons can change color for camouflage.",
+  ),
   TFQuestion(
-      questionText: "Flutter is a framework for mobile development.",
-      answer: true,
-      type: 'tf'),
+    questionText: "The Earth is flat.",
+    answer: false,
+    type: 'tf',
+    explanation: "The Earth is an oblate spheroid.",
+  ),
   TFQuestion(
-      questionText: "Water boils at 100 degrees Celsius.",
-      answer: true,
-      type: 'tf'),
+    questionText: "Flutter is a framework for mobile development.",
+    answer: true,
+    type: 'tf',
+    explanation:
+        "Flutter is an open-source UI software development toolkit created by Google. It is used to build natively compiled applications for mobile, web, and desktop from a single codebase.",
+  ),
+  TFQuestion(
+    questionText: "Water boils at 100 degrees Celsius.",
+    answer: true,
+    type: 'tf',
+    explanation:
+        "Under normal atmospheric pressure, water boils at 100 degrees Celsius (212 degrees Fahrenheit). However, this temperature can vary with altitude and pressure changes.",
+  ),
   IQuestion(
-      questionText: "What is the capital of France?",
-      answer: "Paris",
-      type: 'id'),
+    questionText: "What is the capital of France?",
+    answer: "Paris",
+    type: 'id',
+    explanation:
+        "Paris is the capital and largest city of France. It is renowned for its art, fashion, gastronomy, and culture.",
+  ),
   IQuestion(
-      questionText: "What is the capital of France?",
-      answer: "Paris",
-      type: 'id'),
+    questionText: "In which year did the United States gain independence?",
+    answer: "1776",
+    type: 'id',
+    explanation:
+        "The United States gained independence on July 4, 1776, with the adoption of the Declaration of Independence.",
+  ),
   IQuestion(
-      questionText: "In which year did the United States gain independence?",
-      answer: "1776",
-      type: 'id'),
-  IQuestion(
-      questionText: "Who is the author of 'Romeo and Juliet'?",
-      answer: "William Shakespeare",
-      type: 'id'),
+    questionText: "Who is the author of 'Romeo and Juliet'?",
+    answer: "William Shakespeare",
+    type: 'id',
+    explanation:
+        "'Romeo and Juliet' is a tragedy play written by William Shakespeare. It tells the story of two young star-crossed lovers whose deaths ultimately reconcile their feuding families.",
+  ),
   MCQuestion(
     questionText: "What is the capital of Japan?",
     choices: ["Seoul", "Beijing", "Tokyo", "Bangkok"],
     answer: "Tokyo",
     type: 'mc',
+    explanation:
+        "Tokyo is the capital and largest city of Japan. It is a global financial center and has a rich cultural heritage.",
   ),
   MCQuestion(
     questionText: "Which planet is known as the Red Planet?",
     choices: ["Venus", "Mars", "Jupiter", "Saturn"],
     answer: "Mars",
     type: 'mc',
+    explanation:
+        "Mars is known as the Red Planet due to its reddish appearance caused by iron oxide (rust) on its surface.",
   ),
   MCQuestion(
     questionText: "Who wrote the play 'Hamlet'?",
@@ -74,41 +102,29 @@ List<Question> allQuestions = [
     ],
     answer: "William Shakespeare",
     type: 'mc',
+    explanation:
+        "'Hamlet' was written by William Shakespeare, one of the greatest playwrights in history.",
   ),
   TFQuestion(
     questionText: "The Great Wall of China is visible from space.",
     answer: false,
     type: 'tf',
+    explanation:
+        "Contrary to popular belief, the Great Wall of China is generally not visible to the naked eye from space without aid.",
   ),
   TFQuestion(
     questionText: "The Amazon River is the longest river in the world.",
     answer: true,
     type: 'tf',
+    explanation:
+        "The Amazon River is the second-longest river in the world after the Nile. It is the largest river by discharge volume.",
   ),
   TFQuestion(
     questionText: "Bananas are berries.",
     answer: true,
     type: 'tf',
-  ),
-  IQuestion(
-    questionText: "What is the largest ocean on Earth?",
-    answer: "Pacific Ocean",
-    type: 'id',
-  ),
-  IQuestion(
-    questionText: "What is the currency of Brazil?",
-    answer: "Brazilian Real",
-    type: 'id',
-  ),
-  IQuestion(
-    questionText: "Who painted the Mona Lisa?",
-    answer: "Leonardo da Vinci",
-    type: 'id',
-  ),
-  IQuestion(
-    questionText: "What is the main ingredient in guacamole?",
-    answer: "Avocado",
-    type: 'id',
+    explanation:
+        "Botanically, bananas are classified as berries. They are considered berries because they develop from a flower with one ovary and have seeds inside.",
   ),
 ];
 
@@ -156,7 +172,6 @@ class _RandomizerPageState extends State<QuestionPage> {
     setState(() {
       _timer.cancel();
       _isRunning = false;
-      _secondsLeft = 60;
     });
   }
 
@@ -171,12 +186,22 @@ class _RandomizerPageState extends State<QuestionPage> {
   void nextPage() {
     setState(() {
       currentPage++;
+      _secondsLeft = 60;
+      questionState = false;
     });
   }
 
   void prevPage() {
     setState(() {
       currentPage--;
+      _secondsLeft = 60;
+      questionState = false;
+    });
+  }
+
+  void setAnswer() {
+    setState(() {
+      questionState = !questionState;
     });
   }
 
@@ -184,8 +209,6 @@ class _RandomizerPageState extends State<QuestionPage> {
   Widget build(BuildContext context) {
     String selectedPage = randomQuestions[currentPage].type;
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return RawKeyboardListener(
       autofocus: true,
       focusNode: FocusNode(),
@@ -202,6 +225,9 @@ class _RandomizerPageState extends State<QuestionPage> {
           if (currentPage != 9 &&
               event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
             nextPage();
+          }
+          if (event.isKeyPressed(LogicalKeyboardKey.keyA)) {
+            setAnswer();
           }
         }
         if (_isRunning == true &&
@@ -227,8 +253,8 @@ class _RandomizerPageState extends State<QuestionPage> {
             ),
             Center(
               child: Container(
-                width: screenWidth * 0.95,
-                height: screenHeight * 0.9,
+                width: MediaQuery.of(context).size.width * 0.95,
+                height: MediaQuery.of(context).size.height * 0.9,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -250,8 +276,8 @@ class _RandomizerPageState extends State<QuestionPage> {
                   ),
                   padding: const EdgeInsets.all(10.0),
                   child: Container(
-                    width: screenWidth * 0.9,
-                    height: screenHeight * 0.85,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.height * 0.85,
                     decoration: BoxDecoration(
                       image: const DecorationImage(
                         image: AssetImage('assets/background.png'),
@@ -263,126 +289,75 @@ class _RandomizerPageState extends State<QuestionPage> {
                     child: Column(
                       children: [
                         Expanded(
-                            flex: 2,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Image.asset(
-                                  'assets/logo2.png', // Update with your actual logo path
-                                  height: 500,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFD4AD52),
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      color: const Color(0xFF333333),
-                                      width: 10,
-                                    ),
-                                  ),
-                                  width: 600,
-                                  height: 150,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(() {
-                                        switch (selectedPage) {
-                                          case "mc":
-                                            return "MULTIPLE CHOICE";
-                                          case "id":
-                                            return "IDENTIFICATION";
-                                          case "tf":
-                                            return "TRUE OR FALSE";
-                                          default:
-                                            return "";
-                                        }
-                                      }(),
-                                          style: GoogleFonts.montserrat(
-                                            color: Colors.white,
-                                            fontSize: 48,
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                                Image.asset(
-                                  'assets/logo2.png', // Update with your actual logo path
-                                  height: 500,
-                                ),
-                              ],
-                            )),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        CountdownTimer(secondsLeft: _secondsLeft),
-                        Expanded(
-                          flex: 6,
+                          flex: 2,
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Expanded(
-                                flex: 2,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 24.0, horizontal: 28.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      (() {
-                                        if (selectedPage == "mc") {
-                                          return Expanded(
-                                              flex: 2,
-                                              child: MultipleChoicePage(
-                                                  question: randomQuestions[
-                                                          currentPage]
-                                                      as MCQuestion,
-                                                  state: questionState));
-                                        } else if (selectedPage == "tf") {
-                                          return Expanded(
-                                              flex: 2,
-                                              child: TrueOrFalsePage(
-                                                  question: randomQuestions[
-                                                          currentPage]
-                                                      as TFQuestion,
-                                                  state: questionState));
-                                        } else if (selectedPage == "id") {
-                                          return Expanded(
-                                              flex: 2,
-                                              child: IdentificationPage(
-                                                  question: randomQuestions[
-                                                      currentPage] as IQuestion,
-                                                  state: questionState));
-                                        } else {
-                                          return Container();
-                                        }
-                                      })(),
-                                      Row(children: [
-                                        const Spacer(),
-                                        Text(
-                                          "© QRA 2024",
-                                          style: GoogleFonts.montserrat(
-                                              color: const Color(0xFF333333),
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic),
-                                        ),
-                                      ])
-                                    ],
+                              Image.asset(
+                                'assets/logo2.png', // Update with your actual logo path
+                                height: 500,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFD4AD52),
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(
+                                    color: const Color(0xFF333333),
+                                    width: 10,
                                   ),
                                 ),
+                                width: 600,
+                                height: 150,
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(() {
+                                      switch (selectedPage) {
+                                        case "mc":
+                                          return "MULTIPLE CHOICE";
+                                        case "id":
+                                          return "IDENTIFICATION";
+                                        case "tf":
+                                          return "TRUE OR FALSE";
+                                        default:
+                                          return "";
+                                      }
+                                    }(),
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                          fontSize: 48,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              Image.asset(
+                                'assets/logo2.png', // Update with your actual logo path
+                                height: 500,
                               ),
                             ],
                           ),
                         ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        CountdownTimer(secondsLeft: _secondsLeft),
+                        !questionState
+                            ? QuizPage(
+                                remainingSeconds: _secondsLeft,
+                                selectedPage: selectedPage,
+                                currentPage: currentPage,
+                                randomQuestions: randomQuestions,
+                                questionState: questionState,
+                              )
+                            : AnswerPage(
+                                randomQuestions: randomQuestions,
+                                currentPage: currentPage,
+                                selectedPage: selectedPage)
                       ],
                     ),
                   ),

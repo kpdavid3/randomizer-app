@@ -1,8 +1,12 @@
 abstract class Question {
   final String questionText;
   final String type;
+  final String explanation;
 
-  Question({required this.questionText, required this.type});
+  Question(
+      {required this.questionText,
+      required this.type,
+      required this.explanation});
 }
 
 class MCQuestion extends Question {
@@ -10,29 +14,32 @@ class MCQuestion extends Question {
   final String answer;
 
   MCQuestion({
-    required String questionText,
+    required super.questionText,
     required this.choices,
     required this.answer,
-    required String type,
-  }) : super(questionText: questionText, type: type);
+    required super.type,
+    required super.explanation,
+  });
 }
 
 class TFQuestion extends Question {
   final bool answer;
 
   TFQuestion({
-    required String questionText,
+    required super.questionText,
     required this.answer,
-    required String type,
-  }) : super(questionText: questionText, type: type);
+    required super.type,
+    required super.explanation,
+  });
 }
 
 class IQuestion extends Question {
   final String answer;
 
   IQuestion({
-    required String questionText,
+    required super.questionText,
     required this.answer,
-    required String type,
-  }) : super(questionText: questionText, type: type);
+    required super.type,
+    required super.explanation,
+  });
 }
