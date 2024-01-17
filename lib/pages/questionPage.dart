@@ -3,126 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:randomizer_app/components/answerSection.dart';
 import 'package:randomizer_app/components/questionSection.dart';
+import 'package:randomizer_app/global_data.dart';
 import '../components/countdown.dart';
 import '../classes/questions.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
-
-List<Question> allQuestions = [
-  MCQuestion(
-    questionText: "What is the largest mammal in the world?",
-    choices: ["Elephant", "Blue Whale", "Giraffe", "Rhino"],
-    answer: "Blue Whale",
-    type: 'mc',
-    explanation: "The blue whale is the largest mammal on Earth.",
-  ),
-  MCQuestion(
-    questionText: "What do bees collect and use to create honey?",
-    choices: ["Pollen", "Dust", "Leaves", "Bark"],
-    answer: "Pollen",
-    type: 'mc',
-    explanation: "Bees collect pollen to create honey.",
-  ),
-  MCQuestion(
-    questionText: "Which animal is known for its ability to change color?",
-    choices: ["Chameleon", "Octopus", "Polar Bear", "Tiger"],
-    answer: "Chameleon",
-    type: 'mc',
-    explanation: "Chameleons can change color for camouflage.",
-  ),
-  TFQuestion(
-    questionText: "The Earth is flat.",
-    answer: false,
-    type: 'tf',
-    explanation: "The Earth is an oblate spheroid.",
-  ),
-  TFQuestion(
-    questionText: "Flutter is a framework for mobile development.",
-    answer: true,
-    type: 'tf',
-    explanation:
-        "Flutter is an open-source UI software development toolkit created by Google. It is used to build natively compiled applications for mobile, web, and desktop from a single codebase.",
-  ),
-  TFQuestion(
-    questionText: "Water boils at 100 degrees Celsius.",
-    answer: true,
-    type: 'tf',
-    explanation:
-        "Under normal atmospheric pressure, water boils at 100 degrees Celsius (212 degrees Fahrenheit). However, this temperature can vary with altitude and pressure changes.",
-  ),
-  IQuestion(
-    questionText: "What is the capital of France?",
-    answer: "Paris",
-    type: 'id',
-    explanation:
-        "Paris is the capital and largest city of France. It is renowned for its art, fashion, gastronomy, and culture.",
-  ),
-  IQuestion(
-    questionText: "In which year did the United States gain independence?",
-    answer: "1776",
-    type: 'id',
-    explanation:
-        "The United States gained independence on July 4, 1776, with the adoption of the Declaration of Independence.",
-  ),
-  IQuestion(
-    questionText: "Who is the author of 'Romeo and Juliet'?",
-    answer: "William Shakespeare",
-    type: 'id',
-    explanation:
-        "'Romeo and Juliet' is a tragedy play written by William Shakespeare. It tells the story of two young star-crossed lovers whose deaths ultimately reconcile their feuding families.",
-  ),
-  MCQuestion(
-    questionText: "What is the capital of Japan?",
-    choices: ["Seoul", "Beijing", "Tokyo", "Bangkok"],
-    answer: "Tokyo",
-    type: 'mc',
-    explanation:
-        "Tokyo is the capital and largest city of Japan. It is a global financial center and has a rich cultural heritage.",
-  ),
-  MCQuestion(
-    questionText: "Which planet is known as the Red Planet?",
-    choices: ["Venus", "Mars", "Jupiter", "Saturn"],
-    answer: "Mars",
-    type: 'mc',
-    explanation:
-        "Mars is known as the Red Planet due to its reddish appearance caused by iron oxide (rust) on its surface.",
-  ),
-  MCQuestion(
-    questionText: "Who wrote the play 'Hamlet'?",
-    choices: [
-      "Charles Dickens",
-      "Jane Austen",
-      "William Shakespeare",
-      "Mark Twain"
-    ],
-    answer: "William Shakespeare",
-    type: 'mc',
-    explanation:
-        "'Hamlet' was written by William Shakespeare, one of the greatest playwrights in history.",
-  ),
-  TFQuestion(
-    questionText: "The Great Wall of China is visible from space.",
-    answer: false,
-    type: 'tf',
-    explanation:
-        "Contrary to popular belief, the Great Wall of China is generally not visible to the naked eye from space without aid.",
-  ),
-  TFQuestion(
-    questionText: "The Amazon River is the longest river in the world.",
-    answer: true,
-    type: 'tf',
-    explanation:
-        "The Amazon River is the second-longest river in the world after the Nile. It is the largest river by discharge volume.",
-  ),
-  TFQuestion(
-    questionText: "Bananas are berries.",
-    answer: true,
-    type: 'tf',
-    explanation:
-        "Botanically, bananas are classified as berries. They are considered berries because they develop from a flower with one ovary and have seeds inside.",
-  ),
-];
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -137,11 +23,42 @@ class _RandomizerPageState extends State<QuestionPage> {
   int currentPage = 0;
   bool questionState = false;
   String round = "Easy";
+  final List<String> difficultyLevels = [
+    "Easy",
+    "Average",
+    "Difficult",
+    "Clincher"
+  ];
+  int difficultyIndex = 0;
+
 
   @override
   void initState() {
     super.initState();
-    randomQuestions = getRandomQuestions(allQuestions, 10);
+    loadQuestionsForDifficulty(round);
+  }
+
+  void loadQuestionsForDifficulty(String difficulty) {
+    List<Question>? questions;
+    switch (difficulty) {
+      case "Easy":
+        questions = GlobalData().easyQuestions;
+        break;
+      case "Average":
+        questions = GlobalData().averageQuestions;
+        break;
+      case "Difficult":
+        questions = GlobalData().difficultQuestions;
+        break;
+      case "Clincher":
+        questions = GlobalData().clincherQuestions;
+        break;
+    }
+    setState(() {
+      randomQuestions = getRandomQuestions(questions ?? [], 10);
+      currentPage = 0;
+      round = difficulty;
+    });
   }
 
   late Timer _timer;
@@ -374,21 +291,21 @@ class _RandomizerPageState extends State<QuestionPage> {
 }
 
 List<Question> getRandomQuestions(List<Question> questions, int count) {
-  final random = Random();
-  List<Question> selectedQuestions = [];
+    final random = Random();
+    List<Question> selectedQuestions = [];
 
-  // Ensure that the count is not greater than the total number of questions
-  count = count.clamp(0, questions.length);
+    // Ensure that the count is not greater than the total number of questions
+    count = count.clamp(0, questions.length);
 
-  while (selectedQuestions.length < count) {
-    int index = random.nextInt(questions.length);
-    Question randomQuestion = questions[index];
+    while (selectedQuestions.length < count) {
+      int index = random.nextInt(questions.length);
+      Question randomQuestion = questions[index];
 
-    // Check if the question is not already in the selected list
-    if (!selectedQuestions.contains(randomQuestion)) {
-      selectedQuestions.add(randomQuestion);
+      // Check if the question is not already in the selected list
+      if (!selectedQuestions.contains(randomQuestion)) {
+        selectedQuestions.add(randomQuestion);
+      }
     }
+    return selectedQuestions;
   }
 
-  return selectedQuestions;
-}

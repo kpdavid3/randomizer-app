@@ -143,23 +143,27 @@ class HomeState extends State<Home> {
     }
   }
 
-// FOR DEBUGGING ONLY
+  // FOR DEBUGGING ONLY
   void printFirstQuestionAnswer(String difficulty, List<Question>? questions) {
     if (questions != null && questions.isNotEmpty) {
       var firstQuestion = questions.first;
-      var answer = firstQuestion is MCQuestion
-          ? firstQuestion.answer
-          : firstQuestion is TFQuestion
-              ? (firstQuestion.answer ? 'True' : 'False')
-              : firstQuestion is IQuestion
-                  ? firstQuestion.answer
-                  : 'Unknown';
-      print(
-          '$difficulty - First Question Answer: ${firstQuestion.questionText}, Answer: $answer');
+      var answerText = firstQuestion is MCQuestion
+            ? firstQuestion.answer
+            : firstQuestion is TFQuestion
+                ? (firstQuestion.answer ? 'True' : 'False')
+                : firstQuestion is IQuestion
+                    ? firstQuestion.answer
+                    : 'Unknown';
+      var explanation = firstQuestion.explanation;
+
+      print('$difficulty - First Question: ${firstQuestion.questionText}');
+      print('$difficulty - Answer: $answerText');
+      print('$difficulty - Explanation: $explanation');
     } else {
       print('$difficulty - No questions available.');
     }
   }
+
 
   String getButtonText() {
     if (selectedFilePath != null) {
