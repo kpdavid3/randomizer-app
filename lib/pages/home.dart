@@ -164,14 +164,29 @@ class HomeState extends State<Home> {
     }
   }
 
+  // Method to clear the selected file
+  void clearSelectedFile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('questionsFilePath'); // Clear the saved file path
+    setState(() {
+      selectedFilePath = null;
+      // Optionally, clear the loaded questions from GlobalData
+      GlobalData().easyQuestions = null;
+      GlobalData().averageQuestions = null;
+      GlobalData().difficultQuestions = null;
+      GlobalData().clincherQuestions = null;
+    });
+  }
 
   String getButtonText() {
     if (selectedFilePath != null) {
-      var fileName = selectedFilePath!.split('/').last;
+      var filePathComponents = selectedFilePath!.split(Platform.pathSeparator); // Split by path separator
+      var fileName = filePathComponents.last; // Get the last component, which is the file name
       return fileName; // Show only file name
     }
     return "Select Questions";
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -220,9 +235,22 @@ class HomeState extends State<Home> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Button(
-                  buttonText: getButtonText(),
-                  onPressed: selectFile,
+                Stack(
+                  alignment: Alignment.center, // Align the stack's children to the center
+                  children: [
+                    Button(
+                      buttonText: getButtonText(),
+                      onPressed: selectFile,
+                    ),
+                    if (selectedFilePath != null)
+                      Positioned(
+                        left: 0, // Position the 'X' button to the left of the 'Select File' button
+                        child: IconButton(
+                          icon: Icon(Icons.close, color: Colors.white54),
+                          onPressed: clearSelectedFile,
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 20),
                 Button(
