@@ -12,6 +12,9 @@ import '../classes/questions.dart';
 import '../global_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'placeholder.dart';
+
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -20,28 +23,32 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  String? selectedFilePath;
+  String selectedFilePath = "";
 
   @override
   void initState() {
     super.initState();
-    // Initialize with existing file paths from GlobalData
     _loadFilePath();
   }
 
   Future<void> _loadFilePath() async {
+    String filePath = "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? filePath = prefs.getString('questionsFilePath');
+    filePath = prefs.getString('questionsFilePath')!;
 
-    if (filePath != null) {
-      print("ANG FILE PATH AY: ${filePath}");
+    if (filePath != "") {
       setState(() {
         selectedFilePath = filePath;
       });
       // Load questions from Excel if file path is available
       await loadQuestionsFromExcel(filePath);
+    } else {
+      // print("itlog");
+      // GlobalData().loadPlaceholderQuestions(); // Call the method on the instance
     }
   }
+
+
 
   Future<void> selectFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -61,85 +68,96 @@ class HomeState extends State<Home> {
   }
 
   Future<void> loadQuestionsFromExcel(String filePath) async {
-    try {
-      var bytes = File(filePath).readAsBytesSync();
-      var excel = Excel.decodeBytes(bytes);
 
-      Map<String, List<Question>> questionsByDifficulty = {
-        'Easy': [],
-        'Average': [],
-        'Difficult': [],
-        'Clincher': []
-      };
+    if (filePath != "") {
+      try {
+        var bytes = File(filePath).readAsBytesSync();
+        var excel = Excel.decodeBytes(bytes);
 
-      for (var table in excel.tables.keys) {
-        String difficulty =
-            table; // Assuming the table name represents the difficulty
-        List<Question> loadedQuestions =
-            questionsByDifficulty[difficulty] ?? [];
+        Map<String, List<Question>> questionsByDifficulty = {
+          'Easy': [],
+          'Average': [],
+          'Difficult': [],
+          'Clincher': []
+        };
 
-        for (var row in excel.tables[table]!.rows) {
-          if (row[0]?.value != null && row[0]?.value != 'Type of Question') {
-            String type = row[0]?.value.toString() ?? '';
-            String questionText = row[1]?.value.toString() ?? '';
-            dynamic answer;
-            String explanation = row[7]?.value.toString() ?? '';
+        for (var table in excel.tables.keys) {
+          String difficulty =
+              table; // Assuming the table name represents the difficulty
+          List<Question> loadedQuestions =
+              questionsByDifficulty[difficulty] ?? [];
 
-            if (type == 'mc') {
-              answer = row[6]?.value.toString() ?? '';
-              List<String> choices = [
-                row[2]?.value.toString() ?? '',
-                row[3]?.value.toString() ?? '',
-                row[4]?.value.toString() ?? '',
-                row[5]?.value.toString() ?? ''
-              ];
-              loadedQuestions.add(MCQuestion(
-                  questionText: questionText,
-                  choices: choices,
-                  answer: answer,
-                  type: type,
-                  explanation: explanation));
-            } else if (type == 'tf') {
-              answer = (row[6]?.value.toString() ?? '').toLowerCase() == 'true';
-              loadedQuestions.add(TFQuestion(
-                  questionText: questionText,
-                  answer: answer,
-                  type: type,
-                  explanation: explanation));
-            } else if (type == 'id') {
-              answer = row[6]?.value.toString() ?? '';
-              loadedQuestions.add(IQuestion(
-                  questionText: questionText,
-                  answer: answer,
-                  type: type,
-                  explanation: explanation));
+          for (var row in excel.tables[table]!.rows) {
+            if (row[0]?.value != null && row[0]?.value != 'Type of Question') {
+              String type = row[0]?.value.toString() ?? '';
+              String questionText = row[1]?.value.toString() ?? '';
+              dynamic answer;
+              String explanation = row[7]?.value.toString() ?? '';
+
+              if (type == 'mc') {
+                answer = row[6]?.value.toString() ?? '';
+                List<String> choices = [
+                  row[2]?.value.toString() ?? '',
+                  row[3]?.value.toString() ?? '',
+                  row[4]?.value.toString() ?? '',
+                  row[5]?.value.toString() ?? ''
+                ];
+                loadedQuestions.add(MCQuestion(
+                    questionText: questionText,
+                    choices: choices,
+                    answer: answer,
+                    type: type,
+                    explanation: explanation));
+              } else if (type == 'tf') {
+                answer = (row[6]?.value.toString() ?? '').toLowerCase() == 'true';
+                loadedQuestions.add(TFQuestion(
+                    questionText: questionText,
+                    answer: answer,
+                    type: type,
+                    explanation: explanation));
+              } else if (type == 'id') {
+                answer = row[6]?.value.toString() ?? '';
+                loadedQuestions.add(IQuestion(
+                    questionText: questionText,
+                    answer: answer,
+                    type: type,
+                    explanation: explanation));
+              }
             }
           }
+
+          questionsByDifficulty[difficulty] = loadedQuestions;
+
+          // Debug: Print total questions loaded for each difficulty
+          print(
+              '$difficulty - Total Questions Loaded: ${loadedQuestions.length}');
         }
 
-        questionsByDifficulty[difficulty] = loadedQuestions;
+        // Update GlobalData with questions for each difficulty
+        GlobalData().easyQuestions = questionsByDifficulty['easy'];
+        GlobalData().averageQuestions = questionsByDifficulty['average'];
+        GlobalData().difficultQuestions = questionsByDifficulty['difficult'];
+        GlobalData().clincherQuestions = questionsByDifficulty['clincher'];
 
-        // Debug: Print total questions loaded for each difficulty
-        print(
-            '$difficulty - Total Questions Loaded: ${loadedQuestions.length}');
+        // Print the correct answer of the first question of each difficulty from GlobalData
+        printFirstQuestionAnswer('easy', GlobalData().easyQuestions);
+        printFirstQuestionAnswer('average', GlobalData().averageQuestions);
+        printFirstQuestionAnswer('difficult', GlobalData().difficultQuestions);
+        printFirstQuestionAnswer('clincher', GlobalData().clincherQuestions);
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('questionsFilePath', filePath);
+      } catch (e) {
+        print("Error loading Excel file: $e");
       }
+    } else {
 
-      // Update GlobalData with questions for each difficulty
-      GlobalData().easyQuestions = questionsByDifficulty['easy'];
-      GlobalData().averageQuestions = questionsByDifficulty['average'];
-      GlobalData().difficultQuestions = questionsByDifficulty['difficult'];
-      GlobalData().clincherQuestions = questionsByDifficulty['clincher'];
+      // IF FILE PATH IS "", THEN THERE IS NO EXCEL FILE SELECTED
 
-      // Print the correct answer of the first question of each difficulty from GlobalData
-      printFirstQuestionAnswer('easy', GlobalData().easyQuestions);
-      printFirstQuestionAnswer('average', GlobalData().averageQuestions);
-      printFirstQuestionAnswer('difficult', GlobalData().difficultQuestions);
-      printFirstQuestionAnswer('clincher', GlobalData().clincherQuestions);
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('questionsFilePath', filePath);
-    } catch (e) {
-      print("Error loading Excel file: $e");
+      GlobalData().easyQuestions = P_easyQuestions;
+      GlobalData().averageQuestions = P_averageQuestions;
+      GlobalData().difficultQuestions = P_difficultQuestions;
+      GlobalData().clincherQuestions = P_clincherQuestions;
     }
   }
 
@@ -169,7 +187,7 @@ class HomeState extends State<Home> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('questionsFilePath'); // Clear the saved file path
     setState(() {
-      selectedFilePath = null;
+      selectedFilePath = "";
       // Optionally, clear the loaded questions from GlobalData
       GlobalData().easyQuestions = null;
       GlobalData().averageQuestions = null;
@@ -179,7 +197,7 @@ class HomeState extends State<Home> {
   }
 
   String getButtonText() {
-    if (selectedFilePath != null) {
+    if (selectedFilePath != "") {
       var filePathComponents = selectedFilePath!.split(Platform.pathSeparator); // Split by path separator
       var fileName = filePathComponents.last; // Get the last component, which is the file name
       return fileName; // Show only file name
@@ -242,7 +260,7 @@ class HomeState extends State<Home> {
                       buttonText: getButtonText(),
                       onPressed: selectFile,
                     ),
-                    if (selectedFilePath != null)
+                    if (selectedFilePath != "")
                       Positioned(
                         left: 0, // Position the 'X' button to the left of the 'Select File' button
                         child: IconButton(
@@ -256,7 +274,9 @@ class HomeState extends State<Home> {
                 Button(
                   buttonText: 'Start Quiz',
                   onPressed: () {
+                    // if(filePath != null){
                     loadQuestionsFromExcel(selectedFilePath!);
+                    // }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
