@@ -24,7 +24,7 @@ class QuizPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 6,
+      flex: 7,
       child: Row(
         children: [
           Expanded(

@@ -5,14 +5,14 @@ class ChoiceBox extends StatelessWidget {
   final String text;
   final String letter;
   final String type;
-
+  final double fontSize;
   const ChoiceBox({
     super.key,
     required this.text,
     required this.letter,
     required this.type,
+    required this.fontSize,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,16 +20,17 @@ class ChoiceBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-            begin: Alignment.center,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFD4AD52),
-              Color(0xFFD4AD52),
-              Color(0xFFD4AD52),
-              Color(0xFFD4AD52),
-              Color(0xFFD4AD52),
-              Color(0xFF333333),
-            ]),
+          begin: Alignment.center,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFFD4AD52),
+            Color(0xFFD4AD52),
+            Color(0xFFD4AD52),
+            Color(0xFFD4AD52),
+            Color(0xFFD4AD52),
+            Color(0xFF333333),
+          ],
+        ),
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -54,19 +55,25 @@ class ChoiceBox extends StatelessWidget {
                   child: Text(
                     letter,
                     style: GoogleFonts.montserrat(
-                        fontSize: 42,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+                      fontSize: 42,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      height: 1,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-                Text(
-                  text,
-                  style: GoogleFonts.montserrat(
-                      fontSize: 32,
+                Expanded(
+                  child: Text(
+                    text,
+                    style: GoogleFonts.montserrat(
+                      fontSize: fontSize,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+                      fontWeight: FontWeight.bold,
+                      height: 1,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
               ],
             ),
@@ -74,9 +81,11 @@ class ChoiceBox extends StatelessWidget {
             Text(
               text,
               style: GoogleFonts.montserrat(
-                  fontSize: 32,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
+                fontSize: 42,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                height: 1,
+              ),
               textAlign: TextAlign.center,
             ),
         ],

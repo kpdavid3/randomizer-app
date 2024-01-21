@@ -31,7 +31,6 @@ class _RandomizerPageState extends State<QuestionPage> {
   ];
   int difficultyIndex = 0;
 
-
   @override
   void initState() {
     super.initState();
@@ -198,67 +197,63 @@ class _RandomizerPageState extends State<QuestionPage> {
                       ),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                     child: Column(
                       children: [
-                        Expanded(
-                          flex: 2,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Image.asset(
-                                'assets/logo2.png', // Update with your actual logo path
-                                height: 500,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFD4AD52),
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                    color: const Color(0xFF333333),
-                                    width: 10,
-                                  ),
+                        if (!questionState)
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.asset(
+                                  'assets/logo2.png', // Update with your actual logo path
+                                  height: 300,
                                 ),
-                                width: 600,
-                                height: 150,
-                                padding:
-                                    const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(() {
-                                      switch (selectedPage) {
-                                        case "mc":
-                                          return "MULTIPLE CHOICE";
-                                        case "id":
-                                          return "IDENTIFICATION";
-                                        case "tf":
-                                          return "TRUE OR FALSE";
-                                        default:
-                                          return "";
-                                      }
-                                    }(),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFD4AD52),
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: const Color(0xFF333333),
+                                      width: 10,
+                                    ),
+                                  ),
+                                  width: 600,
+                                  height: 80,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        selectedPage == "mc"
+                                            ? "MULTIPLE CHOICE"
+                                            : selectedPage == "id"
+                                                ? "IDENTIFICATION"
+                                                : selectedPage == "tf"
+                                                    ? "TRUE OR FALSE"
+                                                    : "",
                                         style: GoogleFonts.montserrat(
                                           color: Colors.white,
-                                          fontSize: 48,
+                                          fontSize: 42,
                                           fontWeight: FontWeight.bold,
-                                        )),
-                                  ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Image.asset(
-                                'assets/logo2.png', // Update with your actual logo path
-                                height: 500,
-                              ),
-                            ],
+                                Image.asset(
+                                  'assets/logo1.png', // Update with your actual logo path
+                                  height: 300,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        CountdownTimer(secondsLeft: _secondsLeft),
+                        if (!questionState)
+                          CountdownTimer(secondsLeft: _secondsLeft),
                         !questionState
                             ? QuizPage(
                                 remainingSeconds: _secondsLeft,
@@ -291,21 +286,20 @@ class _RandomizerPageState extends State<QuestionPage> {
 }
 
 List<Question> getRandomQuestions(List<Question> questions, int count) {
-    final random = Random();
-    List<Question> selectedQuestions = [];
+  final random = Random();
+  List<Question> selectedQuestions = [];
 
-    // Ensure that the count is not greater than the total number of questions
-    count = count.clamp(0, questions.length);
+  // Ensure that the count is not greater than the total number of questions
+  count = count.clamp(0, questions.length);
 
-    while (selectedQuestions.length < count) {
-      int index = random.nextInt(questions.length);
-      Question randomQuestion = questions[index];
+  while (selectedQuestions.length < count) {
+    int index = random.nextInt(questions.length);
+    Question randomQuestion = questions[index];
 
-      // Check if the question is not already in the selected list
-      if (!selectedQuestions.contains(randomQuestion)) {
-        selectedQuestions.add(randomQuestion);
-      }
+    // Check if the question is not already in the selected list
+    if (!selectedQuestions.contains(randomQuestion)) {
+      selectedQuestions.add(randomQuestion);
     }
-    return selectedQuestions;
   }
-
+  return selectedQuestions;
+}

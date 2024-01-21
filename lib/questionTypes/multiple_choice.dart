@@ -11,6 +11,13 @@ class MultipleChoicePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int length = findLongestChoiceLength(question.choices);
+    double fontSize;
+    if (length > 20) {
+      fontSize = 18;
+    } else {
+      fontSize = 32;
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,12 +45,14 @@ class MultipleChoicePage extends StatelessWidget {
                       text: question.choices[0],
                       type: "mc",
                       letter: "A.",
+                      fontSize: fontSize,
                     )),
                     Expanded(
                         child: ChoiceBox(
                       text: question.choices[1],
                       type: "mc",
                       letter: "B.",
+                      fontSize: fontSize,
                     )),
                   ],
                 ),
@@ -56,12 +65,15 @@ class MultipleChoicePage extends StatelessWidget {
                       text: question.choices[2],
                       type: "mc",
                       letter: "C.",
+                      fontSize: fontSize,
                     )),
                     Expanded(
                         child: ChoiceBox(
-                            text: question.choices[3],
-                            type: "mc",
-                            letter: "D.")),
+                      text: question.choices[3],
+                      type: "mc",
+                      letter: "D.",
+                      fontSize: fontSize,
+                    )),
                   ],
                 ),
               ),
@@ -71,4 +83,15 @@ class MultipleChoicePage extends StatelessWidget {
       ],
     );
   }
+}
+
+int findLongestChoiceLength(List<String> choices) {
+  int maxLength = 0;
+
+  for (String choice in choices) {
+    if (choice.length > maxLength) {
+      maxLength = choice.length;
+    }
+  }
+  return maxLength;
 }
