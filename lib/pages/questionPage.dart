@@ -23,6 +23,10 @@ class _RandomizerPageState extends State<QuestionPage> {
   int currentPage = 0;
   bool questionState = false;
   String round = "Easy";
+
+  bool fadingOut = false;
+  String transitionText = '';
+
   final List<String> difficultyLevels = [
     "Easy",
     "Average",
@@ -35,6 +39,155 @@ class _RandomizerPageState extends State<QuestionPage> {
   void initState() {
     super.initState();
     loadQuestionsForDifficulty(round);
+
+    initiateTransition();
+  }
+
+  void initiateTransition() {
+    setState(() {
+      fadingOut = true;
+      transitionText = "Easy"; // Example: "Easy"
+    });
+
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        fadingOut = false;
+      });
+    });
+  }
+
+    void advanceDifficulty() async {
+    // Check if the next level is Clincher
+    if (difficultyIndex == difficultyLevels.length - 2) {
+      bool proceed = await showClincherConfirmationDialog();
+      if (!proceed) return; // Do not proceed if user chooses not to
+    }
+
+    if (difficultyIndex < difficultyLevels.length - 1) {
+      // Start fade out
+      setState(() {
+        fadingOut = true;
+        // Reset the transitionText so it's empty during the fade-out
+        transitionText = '';
+      });
+
+      // Wait for the fade-out animation to complete
+      await Future.delayed(Duration(seconds: 1));
+
+      // Increment the difficulty and load new questions
+      difficultyIndex++;
+      loadQuestionsForDifficulty(difficultyLevels[difficultyIndex]);
+
+      // Set the transition text for the new difficulty
+      setState(() {
+        transitionText = difficultyLevels[difficultyIndex];
+      });
+
+      // Wait a bit before fading back in
+      await Future.delayed(Duration(seconds: 1)); // Delay before fade-in
+
+      // Reset the fade-out flag for fade in
+      setState(() {
+        fadingOut = false;
+      });
+
+      //Wait for the fade-in animation to complete
+      await Future.delayed(Duration(seconds: 3));
+
+      // Reset the transition text after it has been displayed
+      // This is a band-aid solution to hide text temporarily during fade in
+      setState(() {
+        transitionText = '';
+      });
+    }
+  }
+
+  void decreaseDifficulty() async {
+  if (difficultyIndex > 0) {
+    bool proceed = await showDecreaseDifficultyConfirmationDialog();
+    if (!proceed) return; // Do not proceed if user chooses not to
+
+    setState(() {
+      fadingOut = true;
+      transitionText = ''; // Reset during fade-out
+    });
+
+    await Future.delayed(Duration(seconds: 1));
+
+    difficultyIndex--;
+    loadQuestionsForDifficulty(difficultyLevels[difficultyIndex]);
+
+    setState(() {
+      transitionText = difficultyLevels[difficultyIndex];
+    });
+
+    await Future.delayed(Duration(seconds: 1));
+
+    setState(() {
+      fadingOut = false;
+    });
+
+    await Future.delayed(Duration(seconds: 3));
+
+    setState(() {
+      transitionText = '';
+    });
+  }
+}
+
+Future<bool> showDecreaseDifficultyConfirmationDialog() async {
+  return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Return to Previous Round?"),
+            content: Text("Are you sure you want to return to the previous round?"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop(false); // Return false
+                },
+              ),
+              TextButton(
+                child: Text("Return"),
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Return true
+                },
+              ),
+            ],
+          );
+        },
+      ) ??
+      false; // In case the dialog is dismissed, return false
+}
+
+  Future<bool> showClincherConfirmationDialog() async {
+    return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Proceed to Clincher Round?"),
+              content: Text(
+                  "Proceed to the Clincher round?"),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // Return false
+                  },
+                ),
+                TextButton(
+                  child: Text("Proceed"),
+                  onPressed: () {
+                    Navigator.of(context).pop(true); // Return true
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false; // In case the dialog is dismissed, return false
   }
 
   void loadQuestionsForDifficulty(String difficulty) {
@@ -97,17 +250,30 @@ class _RandomizerPageState extends State<QuestionPage> {
 
   void nextPage() {
     setState(() {
-      currentPage++;
-      _secondsLeft = 60;
-      questionState = false;
+      // Don't do anything if transitioning
+      if(!fadingOut){
+        if (currentPage < 9) {
+          currentPage++;
+          _secondsLeft = 60;
+          questionState = false;
+        } else {
+          advanceDifficulty();
+        }
+      }
     });
   }
 
   void prevPage() {
     setState(() {
-      currentPage--;
-      _secondsLeft = 60;
-      questionState = false;
+      if(!fadingOut){
+        if (currentPage > 0) {
+          currentPage--;
+          _secondsLeft = 60;
+          questionState = false;
+        } else if (difficultyIndex > 0) {
+          decreaseDifficulty();
+        }
+      }
     });
   }
 
@@ -130,11 +296,11 @@ class _RandomizerPageState extends State<QuestionPage> {
               event.isKeyPressed(LogicalKeyboardKey.enter)) {
             _startTimer();
           }
-          if (currentPage != 0 &&
+          if (currentPage >= 0 &&
               event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
             prevPage();
           }
-          if (currentPage != 9 &&
+          if (currentPage < 10&&
               event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
             nextPage();
           }
@@ -154,127 +320,139 @@ class _RandomizerPageState extends State<QuestionPage> {
       child: Scaffold(
         body: Stack(
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                      'assets/background.png'), // Replace with your image asset
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Center(
+            // The main content with fade transition
+            AnimatedOpacity(
+              opacity: fadingOut ? 0.0 : 1.0,
+              duration: const Duration(seconds: 1),
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: MediaQuery.of(context).size.height * 0.9,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        Colors.yellow,
-                        Color(0xFF333333),
-                        Colors.yellow,
-                        Colors.white,
-                        Colors.yellow,
-                        Color(0xFF333333),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/background.png'),
+                    fit: BoxFit.cover,
                   ),
-                  padding: const EdgeInsets.all(10.0),
+                ),
+                child: Center(
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.85,
+                    width: MediaQuery.of(context).size.width * 0.95,
+                    height: MediaQuery.of(context).size.height * 0.9,
                     decoration: BoxDecoration(
-                      image: const DecorationImage(
-                        image: AssetImage('assets/background.png'),
-                        fit: BoxFit.cover,
-                      ),
                       borderRadius: BorderRadius.circular(20),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Colors.yellow,
+                          Color(0xFF333333),
+                          Colors.yellow,
+                          Colors.white,
+                          Colors.yellow,
+                          Color(0xFF333333),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                     ),
-                    child: Column(
-                      children: [
-                        if (!questionState)
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Image.asset(
-                                  'assets/logo2.png', // Update with your actual logo path
-                                  height: 300,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFD4AD52),
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      color: const Color(0xFF333333),
-                                      width: 10,
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.85,
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                          image: AssetImage('assets/background.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        children: [
+                          if (!questionState)
+                            Expanded(
+                              flex: 2,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Image.asset(
+                                    'assets/logo2.png', // Update with your actual logo path
+                                    height: 300,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFD4AD52),
+                                      borderRadius: BorderRadius.circular(100),
+                                      border: Border.all(
+                                        color: const Color(0xFF333333),
+                                        width: 10,
+                                      ),
+                                    ),
+                                    width: 600,
+                                    height: 80,
+                                    padding:
+                                        const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          selectedPage == "mc"
+                                              ? "MULTIPLE CHOICE"
+                                              : selectedPage == "id"
+                                                  ? "IDENTIFICATION"
+                                                  : selectedPage == "tf"
+                                                      ? "TRUE OR FALSE"
+                                                      : "",
+                                          style: GoogleFonts.montserrat(
+                                            color: Colors.white,
+                                            fontSize: 42,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  width: 600,
-                                  height: 80,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        selectedPage == "mc"
-                                            ? "MULTIPLE CHOICE"
-                                            : selectedPage == "id"
-                                                ? "IDENTIFICATION"
-                                                : selectedPage == "tf"
-                                                    ? "TRUE OR FALSE"
-                                                    : "",
-                                        style: GoogleFonts.montserrat(
-                                          color: Colors.white,
-                                          fontSize: 42,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                                  Image.asset(
+                                    'assets/logo1.png', // Update with your actual logo path
+                                    height: 300,
                                   ),
-                                ),
-                                Image.asset(
-                                  'assets/logo1.png', // Update with your actual logo path
-                                  height: 300,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        if (!questionState)
-                          CountdownTimer(secondsLeft: _secondsLeft),
-                        !questionState
-                            ? QuizPage(
-                                remainingSeconds: _secondsLeft,
-                                selectedPage: selectedPage,
-                                currentPage: currentPage,
-                                randomQuestions: randomQuestions,
-                                questionState: questionState,
-                              )
-                            : AnswerPage(
-                                randomQuestions: randomQuestions,
-                                currentPage: currentPage,
-                                selectedPage: selectedPage)
-                      ],
+                          if (!questionState)
+                            CountdownTimer(secondsLeft: _secondsLeft),
+                          !questionState
+                              ? QuizPage(
+                                  remainingSeconds: _secondsLeft,
+                                  selectedPage: selectedPage,
+                                  currentPage: currentPage,
+                                  randomQuestions: randomQuestions,
+                                  questionState: questionState,
+                                )
+                              : AnswerPage(
+                                  randomQuestions: randomQuestions,
+                                  currentPage: currentPage,
+                                  selectedPage: selectedPage),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+            // Transition text
+            if (fadingOut)
+              AnimatedOpacity(
+                opacity: fadingOut ? 1.0 : 0.0,
+                duration: const Duration(seconds: 2),
+                child: Center(
+                  child: Text(
+                    transitionText,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
           ],
         ),
-      ),
+      )
+
     );
   }
 
@@ -303,3 +481,4 @@ List<Question> getRandomQuestions(List<Question> questions, int count) {
   }
   return selectedQuestions;
 }
+
