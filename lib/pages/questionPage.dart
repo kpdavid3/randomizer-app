@@ -27,6 +27,8 @@ class _RandomizerPageState extends State<QuestionPage> {
   bool fadingOut = false;
   String transitionText = '';
 
+  bool isModalDisplayed = false;
+
   final List<String> difficultyLevels = [
     "Easy",
     "Average",
@@ -136,12 +138,16 @@ class _RandomizerPageState extends State<QuestionPage> {
 }
 
 Future<bool> showDecreaseDifficultyConfirmationDialog() async {
-  return await showDialog(
+  if (isModalDisplayed) return false; 
+
+  isModalDisplayed = true;
+
+  bool result = await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Return to Previous Round?"),
-            content: Text("Are you sure you want to return to the previous round?"),
+            // content: Text("Are you sure you want to return to the previous round?"),
             actions: <Widget>[
               TextButton(
                 child: Text("Cancel"),
@@ -160,16 +166,22 @@ Future<bool> showDecreaseDifficultyConfirmationDialog() async {
         },
       ) ??
       false; // In case the dialog is dismissed, return false
+
+    isModalDisplayed = false;
+    return result;
 }
 
   Future<bool> showClincherConfirmationDialog() async {
-    return await showDialog(
+    if (isModalDisplayed) return false; 
+
+    isModalDisplayed = true;
+    bool result =  await showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text("Proceed to Clincher Round?"),
-              content: Text(
-                  "Proceed to the Clincher round?"),
+              // content: Text(
+              //     "Proceed to the Clincher round?"),
               actions: <Widget>[
                 TextButton(
                   child: Text("Cancel"),
@@ -188,6 +200,9 @@ Future<bool> showDecreaseDifficultyConfirmationDialog() async {
           },
         ) ??
         false; // In case the dialog is dismissed, return false
+
+    isModalDisplayed = false;
+    return result;
   }
 
   void loadQuestionsForDifficulty(String difficulty) {
