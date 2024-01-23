@@ -10,6 +10,7 @@ import '../classes/questions.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import 'end.dart';
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -29,6 +30,8 @@ class _RandomizerPageState extends State<QuestionPage> {
   String transitionText = '';
 
   bool isModalDisplayed = false;
+  bool navigatingToEndPage = false;
+
 
   final List<String> difficultyLevels = [
     "Easy",
@@ -63,8 +66,14 @@ class _RandomizerPageState extends State<QuestionPage> {
     // Check if the next level is Clincher
     if (difficultyIndex == difficultyLevels.length - 2) {
       bool proceed = await showClincherConfirmationDialog();
-      if (!proceed) return; // Do not proceed if user chooses not to
+      if (!proceed) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const EndPage()),
+        );
+        return; // Navigate to EndPage and do not proceed if user chooses not to
+      }
     }
+
 
     if (difficultyIndex < difficultyLevels.length - 1) {
       // Start fade out
@@ -103,6 +112,14 @@ class _RandomizerPageState extends State<QuestionPage> {
       setState(() {
         transitionText = '';
       });
+    } else {
+      // If the difficulty level is already the last one (Clincher) and it's being advanced
+      if (!navigatingToEndPage) {
+        navigatingToEndPage = true;  // Set flag to true to prevent multiple navigations
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const EndPage()),
+        );
+      }
     }
   }
 
@@ -325,9 +342,8 @@ void _startTimer() {
 
 
   void nextPage() {
-    setState(() {
-      // Don't do anything if transitioning
-      if (!fadingOut) {
+    if (!isModalDisplayed && !fadingOut) {
+      setState(() {
         if (currentPage < 9) {
           currentPage++;
           setTimerForCurrentDifficulty();
@@ -335,13 +351,13 @@ void _startTimer() {
         } else {
           advanceDifficulty();
         }
-      }
-    });
+      });
+    }
   }
 
   void prevPage() {
-    setState(() {
-      if (!fadingOut) {
+    if (!isModalDisplayed && !fadingOut) {
+      setState(() {
         if (currentPage > 0) {
           currentPage--;
           setTimerForCurrentDifficulty();
@@ -349,9 +365,10 @@ void _startTimer() {
         } else if (difficultyIndex > 0) {
           decreaseDifficulty();
         }
-      }
-    });
+      });
+    }
   }
+
 
   void setAnswer() {
     setState(() {
