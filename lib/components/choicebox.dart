@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChoiceBox extends StatelessWidget {
   final String text;
@@ -55,7 +56,7 @@ class ChoiceBox extends StatelessWidget {
                   child: Text(
                     letter,
                     style: GoogleFonts.montserrat(
-                      fontSize: 42,
+                      fontSize: 42.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       height: 1,
@@ -67,7 +68,7 @@ class ChoiceBox extends StatelessWidget {
                   child: Text(
                     text,
                     style: GoogleFonts.montserrat(
-                      fontSize: fontSize,
+                      fontSize: fontSize.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       height: 1,
@@ -81,7 +82,7 @@ class ChoiceBox extends StatelessWidget {
             Text(
               text,
               style: GoogleFonts.montserrat(
-                fontSize: 42,
+                fontSize: 42.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 height: 1,

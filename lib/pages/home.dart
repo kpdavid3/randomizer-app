@@ -13,7 +13,7 @@ import '../global_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'placeholder.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -48,8 +48,6 @@ class HomeState extends State<Home> {
     }
   }
 
-
-
   Future<void> selectFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -68,7 +66,6 @@ class HomeState extends State<Home> {
   }
 
   Future<void> loadQuestionsFromExcel(String filePath) async {
-
     if (filePath != "") {
       try {
         var bytes = File(filePath).readAsBytesSync();
@@ -109,7 +106,8 @@ class HomeState extends State<Home> {
                     type: type,
                     explanation: explanation));
               } else if (type == 'tf') {
-                answer = (row[6]?.value.toString() ?? '').toLowerCase() == 'true';
+                answer =
+                    (row[6]?.value.toString() ?? '').toLowerCase() == 'true';
                 loadedQuestions.add(TFQuestion(
                     questionText: questionText,
                     answer: answer,
@@ -151,7 +149,6 @@ class HomeState extends State<Home> {
         print("Error loading Excel file: $e");
       }
     } else {
-
       // IF FILE PATH IS "", THEN THERE IS NO EXCEL FILE SELECTED
 
       GlobalData().easyQuestions = P_easyQuestions;
@@ -166,12 +163,12 @@ class HomeState extends State<Home> {
     if (questions != null && questions.isNotEmpty) {
       var firstQuestion = questions.first;
       var answerText = firstQuestion is MCQuestion
-            ? firstQuestion.answer
-            : firstQuestion is TFQuestion
-                ? (firstQuestion.answer ? 'True' : 'False')
-                : firstQuestion is IQuestion
-                    ? firstQuestion.answer
-                    : 'Unknown';
+          ? firstQuestion.answer
+          : firstQuestion is TFQuestion
+              ? (firstQuestion.answer ? 'True' : 'False')
+              : firstQuestion is IQuestion
+                  ? firstQuestion.answer
+                  : 'Unknown';
       var explanation = firstQuestion.explanation;
 
       print('$difficulty - First Question: ${firstQuestion.questionText}');
@@ -198,13 +195,14 @@ class HomeState extends State<Home> {
 
   String getButtonText() {
     if (selectedFilePath != "") {
-      var filePathComponents = selectedFilePath!.split(Platform.pathSeparator); // Split by path separator
-      var fileName = filePathComponents.last; // Get the last component, which is the file name
+      var filePathComponents = selectedFilePath!
+          .split(Platform.pathSeparator); // Split by path separator
+      var fileName = filePathComponents
+          .last; // Get the last component, which is the file name
       return fileName; // Show only file name
     }
     return "Select Questions";
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -221,13 +219,30 @@ class HomeState extends State<Home> {
 
     return Scaffold(
       body: Container(
-        color: Colors.red[200],
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            colors: [
+              Colors.yellow,
+              Color(0xFF333333),
+              Colors.yellow,
+              Colors.white,
+              Colors.yellow,
+              Color(0xFF333333),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         child: Center(
           child: Container(
             width: screenWidth * 0.95,
             height: screenHeight * 0.9,
             decoration: BoxDecoration(
-              color: Colors.white,
+              image: const DecorationImage(
+                image: AssetImage('assets/background.png'),
+                fit: BoxFit.cover,
+              ),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
@@ -240,21 +255,29 @@ class HomeState extends State<Home> {
                 Text(
                   'National Science Quiz Contest',
                   style: GoogleFonts.montserrat(
-                    fontSize: 36,
-                    color: Colors.red,
+                    fontSize: 48,
+                    color: const Color(0xFFD4AD52),
                     fontWeight: FontWeight.bold,
+                    shadows: [
+                      const Shadow(
+                        color: Colors.grey,
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 6.0,
+                      ),
+                    ],
                   ),
                 ),
                 Text(
                   'Quiz Randomizer',
                   style: GoogleFonts.montserrat(
                     fontSize: 18,
-                    color: Colors.black,
+                    color: const Color(0xFF333333),
                   ),
                 ),
                 const SizedBox(height: 20),
                 Stack(
-                  alignment: Alignment.center, // Align the stack's children to the center
+                  alignment: Alignment
+                      .center, // Align the stack's children to the center
                   children: [
                     Button(
                       buttonText: getButtonText(),
@@ -262,7 +285,8 @@ class HomeState extends State<Home> {
                     ),
                     if (selectedFilePath != "")
                       Positioned(
-                        left: 0, // Position the 'X' button to the left of the 'Select File' button
+                        left:
+                            0, // Position the 'X' button to the left of the 'Select File' button
                         child: IconButton(
                           icon: Icon(Icons.close, color: Colors.white54),
                           onPressed: clearSelectedFile,

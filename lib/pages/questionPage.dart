@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:randomizer_app/components/answerSection.dart';
 import 'package:randomizer_app/components/questionSection.dart';
 import 'package:randomizer_app/global_data.dart';
+import '../components/defaultSection.dart';
 import '../components/countdown.dart';
 import '../classes/questions.dart';
 import 'dart:math';
@@ -58,7 +59,7 @@ class _RandomizerPageState extends State<QuestionPage> {
     });
   }
 
-    void advanceDifficulty() async {
+  void advanceDifficulty() async {
     // Check if the next level is Clincher
     if (difficultyIndex == difficultyLevels.length - 2) {
       bool proceed = await showClincherConfirmationDialog();
@@ -82,7 +83,8 @@ class _RandomizerPageState extends State<QuestionPage> {
 
       // Set the transition text for the new difficulty
       setState(() {
-        transitionText = difficultyLevels[difficultyIndex];
+        transitionText = "${difficultyLevels[difficultyIndex]} Round";
+        ;
       });
 
       // Wait a bit before fading back in
@@ -105,77 +107,78 @@ class _RandomizerPageState extends State<QuestionPage> {
   }
 
   void decreaseDifficulty() async {
-  if (difficultyIndex > 0) {
-    bool proceed = await showDecreaseDifficultyConfirmationDialog();
-    if (!proceed) return; // Do not proceed if user chooses not to
+    if (difficultyIndex > 0) {
+      bool proceed = await showDecreaseDifficultyConfirmationDialog();
+      if (!proceed) return; // Do not proceed if user chooses not to
 
-    setState(() {
-      fadingOut = true;
-      transitionText = ''; // Reset during fade-out
-    });
+      setState(() {
+        fadingOut = true;
+        transitionText = ''; // Reset during fade-out
+      });
 
-    await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 1));
 
-    difficultyIndex--;
-    loadQuestionsForDifficulty(difficultyLevels[difficultyIndex]);
+      difficultyIndex--;
+      loadQuestionsForDifficulty(difficultyLevels[difficultyIndex]);
 
-    setState(() {
-      transitionText = difficultyLevels[difficultyIndex];
-    });
+      setState(() {
+        transitionText = "${difficultyLevels[difficultyIndex]} Round";
+        ;
+      });
 
-    await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 1));
 
-    setState(() {
-      fadingOut = false;
-    });
+      setState(() {
+        fadingOut = false;
+      });
 
-    await Future.delayed(Duration(seconds: 3));
+      await Future.delayed(Duration(seconds: 3));
 
-    setState(() {
-      transitionText = '';
-    });
+      setState(() {
+        transitionText = '';
+      });
+    }
   }
-}
 
-Future<bool> showDecreaseDifficultyConfirmationDialog() async {
-  if (isModalDisplayed) return false; 
+  Future<bool> showDecreaseDifficultyConfirmationDialog() async {
+    if (isModalDisplayed) return false;
 
-  isModalDisplayed = true;
+    isModalDisplayed = true;
 
-  bool result = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Return to Previous Round?"),
-            // content: Text("Are you sure you want to return to the previous round?"),
-            actions: <Widget>[
-              TextButton(
-                child: Text("Cancel"),
-                onPressed: () {
-                  Navigator.of(context).pop(false); // Return false
-                },
-              ),
-              TextButton(
-                child: Text("Return"),
-                onPressed: () {
-                  Navigator.of(context).pop(true); // Return true
-                },
-              ),
-            ],
-          );
-        },
-      ) ??
-      false; // In case the dialog is dismissed, return false
+    bool result = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Return to Previous Round?"),
+              // content: Text("Are you sure you want to return to the previous round?"),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // Return false
+                  },
+                ),
+                TextButton(
+                  child: Text("Return"),
+                  onPressed: () {
+                    Navigator.of(context).pop(true); // Return true
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false; // In case the dialog is dismissed, return false
 
     isModalDisplayed = false;
     return result;
-}
+  }
 
   Future<bool> showClincherConfirmationDialog() async {
-    if (isModalDisplayed) return false; 
+    if (isModalDisplayed) return false;
 
     isModalDisplayed = true;
-    bool result =  await showDialog(
+    bool result = await showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
@@ -266,7 +269,7 @@ Future<bool> showDecreaseDifficultyConfirmationDialog() async {
   void nextPage() {
     setState(() {
       // Don't do anything if transitioning
-      if(!fadingOut){
+      if (!fadingOut) {
         if (currentPage < 9) {
           currentPage++;
           _secondsLeft = 60;
@@ -280,7 +283,7 @@ Future<bool> showDecreaseDifficultyConfirmationDialog() async {
 
   void prevPage() {
     setState(() {
-      if(!fadingOut){
+      if (!fadingOut) {
         if (currentPage > 0) {
           currentPage--;
           _secondsLeft = 60;
@@ -303,172 +306,192 @@ Future<bool> showDecreaseDifficultyConfirmationDialog() async {
     String selectedPage = randomQuestions[currentPage].type;
 
     return RawKeyboardListener(
-      autofocus: true,
-      focusNode: FocusNode(),
-      onKey: (RawKeyEvent event) {
-        if (_isRunning == false) {
-          if (_secondsLeft != 0 &&
-              event.isKeyPressed(LogicalKeyboardKey.enter)) {
-            _startTimer();
+        autofocus: true,
+        focusNode: FocusNode(),
+        onKey: (RawKeyEvent event) {
+          if (_isRunning == false) {
+            if (_secondsLeft != 0 &&
+                event.isKeyPressed(LogicalKeyboardKey.enter)) {
+              _startTimer();
+            }
+            if (currentPage >= 0 &&
+                event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+              prevPage();
+            }
+            if (currentPage < 10 &&
+                event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+              nextPage();
+            }
+            if (event.isKeyPressed(LogicalKeyboardKey.keyA)) {
+              setAnswer();
+            }
           }
-          if (currentPage >= 0 &&
-              event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-            prevPage();
+          if (_isRunning == true &&
+              _secondsLeft != 0 &&
+              event.isKeyPressed(LogicalKeyboardKey.keyP)) {
+            _pauseTimer();
           }
-          if (currentPage < 10&&
-              event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-            nextPage();
+          if (event.isKeyPressed(LogicalKeyboardKey.keyR)) {
+            _resetTimer();
           }
-          if (event.isKeyPressed(LogicalKeyboardKey.keyA)) {
-            setAnswer();
-          }
-        }
-        if (_isRunning == true &&
-            _secondsLeft != 0 &&
-            event.isKeyPressed(LogicalKeyboardKey.keyP)) {
-          _pauseTimer();
-        }
-        if (event.isKeyPressed(LogicalKeyboardKey.keyR)) {
-          _resetTimer();
-        }
-      },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            // The main content with fade transition
-            AnimatedOpacity(
-              opacity: fadingOut ? 0.0 : 1.0,
-              duration: const Duration(seconds: 1),
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/background.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.yellow,
-                          Color(0xFF333333),
-                          Colors.yellow,
-                          Colors.white,
-                          Colors.yellow,
-                          Color(0xFF333333),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+        },
+        child: Scaffold(
+          body: Stack(
+            children: [
+              // The main content with fade transition
+              AnimatedOpacity(
+                opacity: fadingOut ? 0.0 : 1.0,
+                duration: const Duration(seconds: 1),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/background.png'),
+                      fit: BoxFit.cover,
                     ),
-                    padding: const EdgeInsets.all(10.0),
+                  ),
+                  child: Center(
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.85,
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      height: MediaQuery.of(context).size.height * 0.9,
                       decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          image: AssetImage('assets/background.png'),
-                          fit: BoxFit.cover,
-                        ),
                         borderRadius: BorderRadius.circular(20),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Colors.yellow,
+                            Color(0xFF333333),
+                            Colors.yellow,
+                            Colors.white,
+                            Colors.yellow,
+                            Color(0xFF333333),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                       ),
-                      child: Column(
-                        children: [
-                          if (!questionState)
-                            Expanded(
-                              flex: 2,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Image.asset(
-                                    'assets/logo2.png', // Update with your actual logo path
-                                    height: 300,
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFD4AD52),
-                                      borderRadius: BorderRadius.circular(100),
-                                      border: Border.all(
-                                        color: const Color(0xFF333333),
-                                        width: 10,
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: MediaQuery.of(context).size.height * 0.85,
+                        decoration: BoxDecoration(
+                          image: const DecorationImage(
+                            image: AssetImage('assets/background.png'),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          children: [
+                            if (!questionState)
+                              Expanded(
+                                flex: 2,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Image.asset(
+                                      'assets/logo2.png', // Update with your actual logo path
+                                      height: 300,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFD4AD52),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        border: Border.all(
+                                          color: const Color(0xFF333333),
+                                          width: 10,
+                                        ),
+                                      ),
+                                      width: 600,
+                                      height: 80,
+                                      padding:
+                                          const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            selectedPage == "mc"
+                                                ? "MULTIPLE CHOICE"
+                                                : selectedPage == "id"
+                                                    ? "IDENTIFICATION"
+                                                    : selectedPage == "tf"
+                                                        ? "TRUE OR FALSE"
+                                                        : "",
+                                            style: GoogleFonts.montserrat(
+                                              color: Colors.white,
+                                              fontSize: 42,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    width: 600,
-                                    height: 80,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          selectedPage == "mc"
-                                              ? "MULTIPLE CHOICE"
-                                              : selectedPage == "id"
-                                                  ? "IDENTIFICATION"
-                                                  : selectedPage == "tf"
-                                                      ? "TRUE OR FALSE"
-                                                      : "",
-                                          style: GoogleFonts.montserrat(
-                                            color: Colors.white,
-                                            fontSize: 42,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
+                                    Image.asset(
+                                      'assets/logo1.png', // Update with your actual logo path
+                                      height: 300,
                                     ),
-                                  ),
-                                  Image.asset(
-                                    'assets/logo1.png', // Update with your actual logo path
-                                    height: 300,
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          if (!questionState)
-                            CountdownTimer(secondsLeft: _secondsLeft),
-                          !questionState
-                              ? QuizPage(
-                                  remainingSeconds: _secondsLeft,
-                                  selectedPage: selectedPage,
-                                  currentPage: currentPage,
-                                  randomQuestions: randomQuestions,
-                                  questionState: questionState,
-                                )
-                              : AnswerPage(
-                                  randomQuestions: randomQuestions,
-                                  currentPage: currentPage,
-                                  selectedPage: selectedPage),
-                        ],
+                            if (!questionState)
+                              CountdownTimer(secondsLeft: _secondsLeft),
+                            !questionState
+                                ? QuizPage(
+                                    remainingSeconds: _secondsLeft,
+                                    selectedPage: selectedPage,
+                                    currentPage: currentPage,
+                                    randomQuestions: randomQuestions,
+                                    questionState: questionState,
+                                  )
+                                : AnswerPage(
+                                    randomQuestions: randomQuestions,
+                                    currentPage: currentPage,
+                                    selectedPage: selectedPage),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            // Transition text
-            if (fadingOut)
-              AnimatedOpacity(
-                opacity: fadingOut ? 1.0 : 0.0,
-                duration: const Duration(seconds: 2),
-                child: Center(
-                  child: Text(
-                    transitionText,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              // Transition text
+              if (fadingOut)
+                AnimatedOpacity(
+                  opacity: fadingOut ? 1.0 : 0.0,
+                  duration: const Duration(seconds: 2),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/background.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        transitionText,
+                        style: GoogleFonts.montserrat(
+                          color: const Color(0xFFD4AD52),
+                          fontSize: 128,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            const Shadow(
+                              color: Colors.grey,
+                              offset: Offset(2.0, 2.0),
+                              blurRadius: 12.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-          ],
-        ),
-      )
-
-    );
+            ],
+          ),
+        ));
   }
 
   @override
@@ -496,4 +519,3 @@ List<Question> getRandomQuestions(List<Question> questions, int count) {
   }
   return selectedQuestions;
 }
-

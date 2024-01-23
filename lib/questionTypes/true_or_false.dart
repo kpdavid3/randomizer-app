@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/choicebox.dart';
 import '../classes/questions.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TrueOrFalsePage extends StatelessWidget {
   final TFQuestion question;
@@ -22,7 +23,7 @@ class TrueOrFalsePage extends StatelessWidget {
         Text(
           question.questionText,
           style: GoogleFonts.montserrat(
-            fontSize: 24,
+            fontSize: 24.sp,
             color: const Color(0xFF333333),
             fontWeight: FontWeight.bold,
           ),

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:randomizer_app/classes/questions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AnswerPage extends StatelessWidget {
   final int currentPage;
@@ -64,7 +65,7 @@ class AnswerPage extends StatelessWidget {
                           }(),
                           style: GoogleFonts.montserrat(
                             color: const Color(0xFF333333),
-                            fontSize: 54,
+                            fontSize: 54.sp,
                             fontWeight: FontWeight.bold,
                             height: 1,
                           ),
@@ -88,7 +89,7 @@ class AnswerPage extends StatelessWidget {
                       "Answer",
                       style: GoogleFonts.montserrat(
                         color: Colors.white,
-                        fontSize: 32,
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -101,7 +102,7 @@ class AnswerPage extends StatelessWidget {
               randomQuestions[currentPage].explanation,
               style: GoogleFonts.montserrat(
                 color: const Color(0xFF333333),
-                fontSize: 32,
+                fontSize: 32.sp,
                 fontWeight: FontWeight.w500,
               ),
               textAlign: TextAlign.center,

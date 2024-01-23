@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CountdownTimer extends StatefulWidget {
@@ -29,7 +30,7 @@ class CountdownTimerState extends State<CountdownTimer> {
         child: Text(
           _formatTime(widget.secondsLeft),
           style: GoogleFonts.montserrat(
-            fontSize: 32,
+            fontSize: 32.sp,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),

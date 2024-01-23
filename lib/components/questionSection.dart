@@ -4,6 +4,7 @@ import 'package:randomizer_app/classes/questions.dart';
 import 'package:randomizer_app/questionTypes/identification.dart';
 import 'package:randomizer_app/questionTypes/multiple_choice.dart';
 import 'package:randomizer_app/questionTypes/true_or_false.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class QuizPage extends StatelessWidget {
   final String selectedPage;
@@ -72,7 +73,7 @@ class QuizPage extends StatelessWidget {
                       "© QRA 2024",
                       style: GoogleFonts.montserrat(
                           color: const Color(0xFF333333),
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontStyle: FontStyle.italic),
                     ),
                   ])

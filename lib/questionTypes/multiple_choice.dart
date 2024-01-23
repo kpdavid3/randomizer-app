@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/choicebox.dart';
 import '../classes/questions.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MultipleChoicePage extends StatelessWidget {
   final MCQuestion question;
@@ -26,7 +27,7 @@ class MultipleChoicePage extends StatelessWidget {
         Text(
           question.questionText,
           style: GoogleFonts.montserrat(
-            fontSize: 24,
+            fontSize: 24.sp,
             color: const Color(0xFF333333),
             fontWeight: FontWeight.bold,
           ),
@@ -45,14 +46,14 @@ class MultipleChoicePage extends StatelessWidget {
                       text: question.choices[0],
                       type: "mc",
                       letter: "A.",
-                      fontSize: fontSize,
+                      fontSize: fontSize.sp,
                     )),
                     Expanded(
                         child: ChoiceBox(
                       text: question.choices[1],
                       type: "mc",
                       letter: "B.",
-                      fontSize: fontSize,
+                      fontSize: fontSize.sp,
                     )),
                   ],
                 ),
@@ -65,14 +66,14 @@ class MultipleChoicePage extends StatelessWidget {
                       text: question.choices[2],
                       type: "mc",
                       letter: "C.",
-                      fontSize: fontSize,
+                      fontSize: fontSize.sp,
                     )),
                     Expanded(
                         child: ChoiceBox(
                       text: question.choices[3],
                       type: "mc",
                       letter: "D.",
-                      fontSize: fontSize,
+                      fontSize: fontSize.sp,
                     )),
                   ],
                 ),

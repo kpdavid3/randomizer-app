@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Button extends StatelessWidget {
   final String buttonText;
@@ -11,13 +12,13 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(
-        minWidth: 200.0, // Minimum width
-        maxWidth: 400.0, // Maximum width
+        minWidth: 200.0,
+        maxWidth: 400.0,
       ),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red[500], // Change color as needed
+          backgroundColor: const Color(0xFFD4AD52),
         ),
         child: Text(
           buttonText,

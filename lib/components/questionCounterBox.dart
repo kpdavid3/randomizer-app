@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CounterBox extends StatelessWidget {
   final String mcNum;
@@ -39,7 +40,7 @@ class CounterBox extends StatelessWidget {
               difficulty,
               style: GoogleFonts.poppins(
                   color: Colors.black45,
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.bold),
             ),
             Row(
@@ -48,7 +49,7 @@ class CounterBox extends StatelessWidget {
                   "Multiple Choice:",
                   style: GoogleFonts.poppins(
                     color: Colors.grey,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
                 const Spacer(),
@@ -56,7 +57,7 @@ class CounterBox extends StatelessWidget {
                   mcNum,
                   style: GoogleFonts.poppins(
                     color: Colors.grey,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
               ],
@@ -67,7 +68,7 @@ class CounterBox extends StatelessWidget {
                   "Identification:",
                   style: GoogleFonts.poppins(
                     color: Colors.grey,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
                 const Spacer(),
@@ -75,7 +76,7 @@ class CounterBox extends StatelessWidget {
                   iNum,
                   style: GoogleFonts.poppins(
                     color: Colors.grey,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
               ],
@@ -86,7 +87,7 @@ class CounterBox extends StatelessWidget {
                   "True or False:",
                   style: GoogleFonts.poppins(
                     color: Colors.grey,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
                 const Spacer(),
@@ -94,7 +95,7 @@ class CounterBox extends StatelessWidget {
                   tfNum,
                   style: GoogleFonts.poppins(
                     color: Colors.grey,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
               ],
