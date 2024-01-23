@@ -49,10 +49,10 @@ class _RandomizerPageState extends State<QuestionPage> {
   void initiateTransition() {
     setState(() {
       fadingOut = true;
-      transitionText = "Easy"; // Example: "Easy"
+      transitionText = "Easy Round"; // Example: "Easy"
     });
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds: 2), () {
       setState(() {
         fadingOut = false;
       });
@@ -88,7 +88,7 @@ class _RandomizerPageState extends State<QuestionPage> {
       });
 
       // Wait a bit before fading back in
-      await Future.delayed(Duration(seconds: 1)); // Delay before fade-in
+      await Future.delayed(Duration(seconds: 2)); // Delay before fade-in
 
       // Reset the fade-out flag for fade in
       setState(() {
@@ -126,7 +126,7 @@ class _RandomizerPageState extends State<QuestionPage> {
         ;
       });
 
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 2));
 
       setState(() {
         fadingOut = false;
@@ -211,19 +211,23 @@ class _RandomizerPageState extends State<QuestionPage> {
   void loadQuestionsForDifficulty(String difficulty) {
     List<Question>? questions;
     switch (difficulty) {
-      case "Easy":
-        questions = GlobalData().easyQuestions;
-        break;
-      case "Average":
-        questions = GlobalData().averageQuestions;
-        break;
-      case "Difficult":
-        questions = GlobalData().difficultQuestions;
-        break;
-      case "Clincher":
-        questions = GlobalData().clincherQuestions;
-        break;
-    }
+    case "Easy":
+      questions = GlobalData().easyQuestions;
+      _secondsLeft = 10;
+      break;
+    case "Average":
+      questions = GlobalData().averageQuestions;
+      _secondsLeft = 20;
+      break;
+    case "Difficult":
+    case "Clincher":
+      questions = GlobalData().difficultQuestions;
+      _secondsLeft = 30;
+      break;
+    default:
+      questions = []; 
+      _secondsLeft = 30;
+  }
     setState(() {
       randomQuestions = getRandomQuestions(questions ?? [], 10);
       currentPage = 0;
@@ -246,10 +250,31 @@ class _RandomizerPageState extends State<QuestionPage> {
     }
   }
 
-  void _startTimer() {
-    _isRunning = true;
-    _timer = Timer.periodic(const Duration(seconds: 1), _updateTimer);
+void _startTimer() {
+  int timerDuration;
+  switch (difficultyLevels[difficultyIndex]) {
+    case "Easy":
+      timerDuration = 10;
+      break;
+    case "Average":
+      timerDuration = 20;
+      break;
+    case "Difficult":
+    case "Clincher":
+      timerDuration = 30;
+      break;
+    default:
+      timerDuration = 30;
   }
+
+  setState(() {
+    _secondsLeft = timerDuration;
+  });
+
+  _isRunning = true;
+  _timer = Timer.periodic(const Duration(seconds: 1), _updateTimer);
+}
+
 
   void _pauseTimer() {
     setState(() {
@@ -262,9 +287,42 @@ class _RandomizerPageState extends State<QuestionPage> {
     setState(() {
       _timer.cancel();
       _isRunning = false;
-      _secondsLeft = 60;
+      
+      switch (difficultyLevels[difficultyIndex]) {
+        case "Easy":
+          _secondsLeft = 10;
+          break;
+        case "Average":
+          _secondsLeft = 20;
+          break;
+        case "Difficult":
+        case "Clincher":
+          _secondsLeft = 30;
+          break;
+        default:
+          _secondsLeft = 30;
+      }
     });
   }
+
+  void setTimerForCurrentDifficulty() {
+  switch (difficultyLevels[difficultyIndex]) {
+    case "Easy":
+      _secondsLeft = 10;
+      break;
+    case "Average":
+      _secondsLeft = 20;
+      break;
+    case "Difficult":
+    case "Clincher":
+      _secondsLeft = 30;
+      break;
+    default:
+      _secondsLeft = 30;
+  }
+  _isRunning = false;
+}
+
 
   void nextPage() {
     setState(() {
@@ -272,7 +330,7 @@ class _RandomizerPageState extends State<QuestionPage> {
       if (!fadingOut) {
         if (currentPage < 9) {
           currentPage++;
-          _secondsLeft = 60;
+          setTimerForCurrentDifficulty();
           questionState = false;
         } else {
           advanceDifficulty();
@@ -286,7 +344,7 @@ class _RandomizerPageState extends State<QuestionPage> {
       if (!fadingOut) {
         if (currentPage > 0) {
           currentPage--;
-          _secondsLeft = 60;
+          setTimerForCurrentDifficulty();
           questionState = false;
         } else if (difficultyIndex > 0) {
           decreaseDifficulty();
@@ -462,7 +520,7 @@ class _RandomizerPageState extends State<QuestionPage> {
               if (fadingOut)
                 AnimatedOpacity(
                   opacity: fadingOut ? 1.0 : 0.0,
-                  duration: const Duration(seconds: 2),
+                  duration: const Duration(seconds: 1),
                   child: Container(
                     decoration: const BoxDecoration(
                       image: DecorationImage(
@@ -473,6 +531,7 @@ class _RandomizerPageState extends State<QuestionPage> {
                     child: Center(
                       child: Text(
                         transitionText,
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.montserrat(
                           color: const Color(0xFFD4AD52),
                           fontSize: 128,
