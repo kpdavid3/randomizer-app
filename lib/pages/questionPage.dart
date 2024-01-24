@@ -32,7 +32,6 @@ class _RandomizerPageState extends State<QuestionPage> {
   bool isModalDisplayed = false;
   bool navigatingToEndPage = false;
 
-
   final List<String> difficultyLevels = [
     "Easy",
     "Average",
@@ -68,12 +67,11 @@ class _RandomizerPageState extends State<QuestionPage> {
       bool proceed = await showClincherConfirmationDialog();
       if (!proceed) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const EndPage()),
+          MaterialPageRoute(builder: (context) => const Defaultsection()),
         );
         return; // Navigate to EndPage and do not proceed if user chooses not to
       }
     }
-
 
     if (difficultyIndex < difficultyLevels.length - 1) {
       // Start fade out
@@ -115,7 +113,8 @@ class _RandomizerPageState extends State<QuestionPage> {
     } else {
       // If the difficulty level is already the last one (Clincher) and it's being advanced
       if (!navigatingToEndPage) {
-        navigatingToEndPage = true;  // Set flag to true to prevent multiple navigations
+        navigatingToEndPage =
+            true; // Set flag to true to prevent multiple navigations
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const EndPage()),
         );
@@ -165,23 +164,58 @@ class _RandomizerPageState extends State<QuestionPage> {
     bool result = await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Return to Previous Round?"),
-              // content: Text("Are you sure you want to return to the previous round?"),
-              actions: <Widget>[
-                TextButton(
-                  child: Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop(false); // Return false
-                  },
+            return Container(
+              padding: const EdgeInsets.all(20),
+              child: AlertDialog(
+                title: Text(
+                  "Return to Previous Round?",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 24,
+                    color: const Color(0xFF333333),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                TextButton(
-                  child: Text("Return"),
-                  onPressed: () {
-                    Navigator.of(context).pop(true); // Return true
-                  },
-                ),
-              ],
+                actions: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    decoration: BoxDecoration(
+                      color: Colors.red[400],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: TextButton(
+                      child: Text(
+                        "Cancel",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(false); // Return false
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFD4AD52),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: TextButton(
+                      child: Text(
+                        "Return",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(true); // Return true
+                      },
+                    ),
+                  )
+                ],
+              ),
             );
           },
         ) ??
@@ -198,24 +232,57 @@ class _RandomizerPageState extends State<QuestionPage> {
     bool result = await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Proceed to Clincher Round?"),
-              // content: Text(
-              //     "Proceed to the Clincher round?"),
-              actions: <Widget>[
-                TextButton(
-                  child: Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop(false); // Return false
-                  },
+            return Container(
+              padding: const EdgeInsets.all(20),
+              child: AlertDialog(
+                title: Text(
+                  "Proceed to Clincher Round?",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 24,
+                    color: const Color(0xFF333333),
+                  ),
                 ),
-                TextButton(
-                  child: Text("Proceed"),
-                  onPressed: () {
-                    Navigator.of(context).pop(true); // Return true
-                  },
-                ),
-              ],
+                actions: <Widget>[
+                  TextButton(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      decoration: BoxDecoration(
+                        color: Colors.red[400],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        "Cancel",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop(false); // Return false
+                    },
+                  ),
+                  TextButton(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD4AD52),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Text(
+                        "Proceed",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop(true); // Return true
+                    },
+                  ),
+                ],
+              ),
             );
           },
         ) ??
@@ -228,23 +295,23 @@ class _RandomizerPageState extends State<QuestionPage> {
   void loadQuestionsForDifficulty(String difficulty) {
     List<Question>? questions;
     switch (difficulty) {
-    case "Easy":
-      questions = GlobalData().easyQuestions;
-      _secondsLeft = 10;
-      break;
-    case "Average":
-      questions = GlobalData().averageQuestions;
-      _secondsLeft = 20;
-      break;
-    case "Difficult":
-    case "Clincher":
-      questions = GlobalData().difficultQuestions;
-      _secondsLeft = 30;
-      break;
-    default:
-      questions = []; 
-      _secondsLeft = 30;
-  }
+      case "Easy":
+        questions = GlobalData().easyQuestions;
+        _secondsLeft = 10;
+        break;
+      case "Average":
+        questions = GlobalData().averageQuestions;
+        _secondsLeft = 20;
+        break;
+      case "Difficult":
+      case "Clincher":
+        questions = GlobalData().difficultQuestions;
+        _secondsLeft = 30;
+        break;
+      default:
+        questions = [];
+        _secondsLeft = 30;
+    }
     setState(() {
       randomQuestions = getRandomQuestions(questions ?? [], 10);
       currentPage = 0;
@@ -267,31 +334,30 @@ class _RandomizerPageState extends State<QuestionPage> {
     }
   }
 
-void _startTimer() {
-  int timerDuration;
-  switch (difficultyLevels[difficultyIndex]) {
-    case "Easy":
-      timerDuration = 10;
-      break;
-    case "Average":
-      timerDuration = 20;
-      break;
-    case "Difficult":
-    case "Clincher":
-      timerDuration = 30;
-      break;
-    default:
-      timerDuration = 30;
+  void _startTimer() {
+    int timerDuration;
+    switch (difficultyLevels[difficultyIndex]) {
+      case "Easy":
+        timerDuration = 10;
+        break;
+      case "Average":
+        timerDuration = 20;
+        break;
+      case "Difficult":
+      case "Clincher":
+        timerDuration = 30;
+        break;
+      default:
+        timerDuration = 30;
+    }
+
+    setState(() {
+      _secondsLeft = timerDuration;
+    });
+
+    _isRunning = true;
+    _timer = Timer.periodic(const Duration(seconds: 1), _updateTimer);
   }
-
-  setState(() {
-    _secondsLeft = timerDuration;
-  });
-
-  _isRunning = true;
-  _timer = Timer.periodic(const Duration(seconds: 1), _updateTimer);
-}
-
 
   void _pauseTimer() {
     setState(() {
@@ -304,7 +370,7 @@ void _startTimer() {
     setState(() {
       _timer.cancel();
       _isRunning = false;
-      
+
       switch (difficultyLevels[difficultyIndex]) {
         case "Easy":
           _secondsLeft = 10;
@@ -323,23 +389,22 @@ void _startTimer() {
   }
 
   void setTimerForCurrentDifficulty() {
-  switch (difficultyLevels[difficultyIndex]) {
-    case "Easy":
-      _secondsLeft = 10;
-      break;
-    case "Average":
-      _secondsLeft = 20;
-      break;
-    case "Difficult":
-    case "Clincher":
-      _secondsLeft = 30;
-      break;
-    default:
-      _secondsLeft = 30;
+    switch (difficultyLevels[difficultyIndex]) {
+      case "Easy":
+        _secondsLeft = 10;
+        break;
+      case "Average":
+        _secondsLeft = 20;
+        break;
+      case "Difficult":
+      case "Clincher":
+        _secondsLeft = 30;
+        break;
+      default:
+        _secondsLeft = 30;
+    }
+    _isRunning = false;
   }
-  _isRunning = false;
-}
-
 
   void nextPage() {
     if (!isModalDisplayed && !fadingOut) {
@@ -368,7 +433,6 @@ void _startTimer() {
       });
     }
   }
-
 
   void setAnswer() {
     setState(() {
@@ -399,6 +463,9 @@ void _startTimer() {
             }
             if (event.isKeyPressed(LogicalKeyboardKey.keyA)) {
               setAnswer();
+            }
+            if (event.isKeyPressed(LogicalKeyboardKey.escape)) {
+              Navigator.pop(context);
             }
           }
           if (_isRunning == true &&
