@@ -13,24 +13,33 @@ class MultipleChoicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int length = findLongestChoiceLength(question.choices);
+    bool isLessLength = lessLength(question.choices);
     double fontSize;
-    if (length > 20) {
-      fontSize = 18;
+    if (length > 70) {
+      fontSize = 16;
+    } else if (length > 20) {
+      fontSize = 22;
     } else {
-      fontSize = 32;
+      fontSize = 28;
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 5),
-        Text(
-          question.questionText,
-          style: GoogleFonts.montserrat(
-            fontSize: 24.sp,
-            color: const Color(0xFF333333),
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                question.questionText,
+                style: GoogleFonts.montserrat(
+                  fontSize: 28.sp,
+                  color: const Color(0xFF333333),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 20),
         Expanded(
@@ -38,46 +47,86 @@ class MultipleChoicePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                child: Row(
+              if (!isLessLength)
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: ChoiceBox(
+                        text: question.choices[0].trimLeft(),
+                        type: "mc",
+                        letter: "A.",
+                        fontSize: fontSize.sp,
+                      )),
+                      Expanded(
+                          child: ChoiceBox(
+                        text: question.choices[1].trimLeft(),
+                        type: "mc",
+                        letter: "B.",
+                        fontSize: fontSize.sp,
+                      )),
+                    ],
+                  ),
+                ),
+              if (!isLessLength)
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: ChoiceBox(
+                        text: question.choices[2].trimLeft(),
+                        type: "mc",
+                        letter: "C.",
+                        fontSize: fontSize.sp,
+                      )),
+                      Expanded(
+                          child: ChoiceBox(
+                        text: question.choices[3].trimLeft(),
+                        type: "mc",
+                        letter: "D.",
+                        fontSize: fontSize.sp,
+                      )),
+                    ],
+                  ),
+                ),
+              if (isLessLength)
+                Row(
                   children: [
                     Expanded(
                         child: ChoiceBox(
-                      text: question.choices[0],
+                      text: question.choices[0].trimLeft(),
                       type: "mc",
                       letter: "A.",
                       fontSize: fontSize.sp,
                     )),
                     Expanded(
                         child: ChoiceBox(
-                      text: question.choices[1],
+                      text: question.choices[1].trimLeft(),
                       type: "mc",
                       letter: "B.",
                       fontSize: fontSize.sp,
                     )),
                   ],
                 ),
-              ),
-              Expanded(
-                child: Row(
+              if (isLessLength)
+                Row(
                   children: [
                     Expanded(
                         child: ChoiceBox(
-                      text: question.choices[2],
+                      text: question.choices[2].trimLeft(),
                       type: "mc",
                       letter: "C.",
                       fontSize: fontSize.sp,
                     )),
                     Expanded(
                         child: ChoiceBox(
-                      text: question.choices[3],
+                      text: question.choices[3].trimLeft(),
                       type: "mc",
                       letter: "D.",
                       fontSize: fontSize.sp,
                     )),
                   ],
                 ),
-              ),
             ],
           ),
         )
@@ -95,4 +144,13 @@ int findLongestChoiceLength(List<String> choices) {
     }
   }
   return maxLength;
+}
+
+bool lessLength(List<String> choices) {
+  for (String choice in choices) {
+    if (choice.length >= 70) {
+      return false;
+    }
+  }
+  return true;
 }

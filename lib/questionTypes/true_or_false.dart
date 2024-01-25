@@ -20,13 +20,19 @@ class TrueOrFalsePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 5),
-        Text(
-          question.questionText,
-          style: GoogleFonts.montserrat(
-            fontSize: 24.sp,
-            color: const Color(0xFF333333),
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                question.questionText,
+                style: GoogleFonts.montserrat(
+                  fontSize: 28.sp,
+                  color: const Color(0xFF333333),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
         const Expanded(
           child: Column(

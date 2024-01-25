@@ -56,7 +56,7 @@ class ChoiceBox extends StatelessWidget {
                   child: Text(
                     letter,
                     style: GoogleFonts.montserrat(
-                      fontSize: 42.sp,
+                      fontSize: 38.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       height: 1,

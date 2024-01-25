@@ -251,32 +251,32 @@ class HomeState extends State<Home> {
                   'assets/logo2.png', // Update with your actual logo path
                   height: 200,
                 ),
-                Text(
-                  'National Science Quiz Contest',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 48,
-                    color: const Color(0xFFD4AD52),
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      const Shadow(
-                        color: Colors.grey,
-                        offset: Offset(2.0, 2.0),
-                        blurRadius: 6.0,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          '9th National Animal Science Quiz Contest',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 54,
+                            color: const Color(0xFF333333),
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              const Shadow(
+                                color: Colors.grey,
+                                offset: Offset(2.0, 2.0),
+                                blurRadius: 6.0,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                // Text(
-                //   'Quiz Randomizer',
-                //   style: GoogleFonts.montserrat(
-                //     fontSize: 18,
-                //     color: const Color(0xFF333333),
-                //   ),
-                // ),
                 const SizedBox(height: 20),
                 Stack(
-                  alignment: Alignment
-                      .center, // Align the stack's children to the center
+                  alignment: Alignment.center,
                   children: [
                     Button(
                       buttonText: getButtonText(),
@@ -284,8 +284,7 @@ class HomeState extends State<Home> {
                     ),
                     if (selectedFilePath != "")
                       Positioned(
-                        left:
-                            0, // Position the 'X' button to the left of the 'Select File' button
+                        left: 0,
                         child: IconButton(
                           icon: Icon(Icons.close, color: Colors.white54),
                           onPressed: clearSelectedFile,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:randomizer_app/components/answerSection.dart';
 import 'package:randomizer_app/components/questionSection.dart';
 import 'package:randomizer_app/global_data.dart';
+import 'package:randomizer_app/pages/home.dart';
 import '../components/defaultSection.dart';
 import '../components/countdown.dart';
 import '../classes/questions.dart';
@@ -67,7 +68,7 @@ class _RandomizerPageState extends State<QuestionPage> {
       bool proceed = await showClincherConfirmationDialog();
       if (!proceed) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const Defaultsection()),
+          MaterialPageRoute(builder: (context) => const Home()),
         );
         return; // Navigate to EndPage and do not proceed if user chooses not to
       }
@@ -90,7 +91,12 @@ class _RandomizerPageState extends State<QuestionPage> {
 
       // Set the transition text for the new difficulty
       setState(() {
-        transitionText = "${difficultyLevels[difficultyIndex]} Round";
+        if (difficultyLevels[difficultyIndex].toLowerCase() == "clincher") {
+          transitionText = "Tie-breaker Round";
+        } else {
+          transitionText = "${difficultyLevels[difficultyIndex]} Round";
+        }
+
         ;
       });
 
@@ -167,7 +173,7 @@ class _RandomizerPageState extends State<QuestionPage> {
               padding: const EdgeInsets.all(20),
               child: AlertDialog(
                 title: Text(
-                  "Proceed to Clincher Round?",
+                  "Proceed to Tie-breaker Round?",
                   style: GoogleFonts.montserrat(
                     fontSize: 24,
                     color: const Color(0xFF333333),
@@ -445,6 +451,7 @@ class _RandomizerPageState extends State<QuestionPage> {
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.9,
                         height: MediaQuery.of(context).size.height * 0.85,
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             image: AssetImage('assets/background.png'),
@@ -464,7 +471,7 @@ class _RandomizerPageState extends State<QuestionPage> {
                                   children: [
                                     Image.asset(
                                       'assets/logo2.png', // Update with your actual logo path
-                                      height: 300,
+                                      height: 600,
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
@@ -505,7 +512,7 @@ class _RandomizerPageState extends State<QuestionPage> {
                                     ),
                                     Image.asset(
                                       'assets/logo1.png', // Update with your actual logo path
-                                      height: 300,
+                                      height: 600,
                                     ),
                                   ],
                                 ),
@@ -548,8 +555,8 @@ class _RandomizerPageState extends State<QuestionPage> {
                         transitionText,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.montserrat(
-                          color: const Color(0xFFD4AD52),
-                          fontSize: 128,
+                          color: const Color(0xFF333333),
+                          fontSize: 118,
                           fontWeight: FontWeight.bold,
                           shadows: [
                             const Shadow(

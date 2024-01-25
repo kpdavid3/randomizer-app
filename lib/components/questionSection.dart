@@ -36,7 +36,7 @@ class QuizPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 28.0),
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 28.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,16 +67,16 @@ class QuizPage extends StatelessWidget {
                       return Container();
                     }
                   })(),
-                  Row(children: [
-                    const Spacer(),
-                    Text(
-                      "© QRA 2024",
-                      style: GoogleFonts.montserrat(
-                          color: const Color(0xFF333333),
-                          fontSize: 12.sp,
-                          fontStyle: FontStyle.italic),
-                    ),
-                  ])
+                  // Row(children: [
+                  //   const Spacer(),
+                  //   Text(
+                  //     "© QRA 2024",
+                  //     style: GoogleFonts.montserrat(
+                  //         color: const Color(0xFF333333),
+                  //         fontSize: 12.sp,
+                  //         fontStyle: FontStyle.italic),
+                  //   ),
+                  // ])
                 ],
               ),
             ),
