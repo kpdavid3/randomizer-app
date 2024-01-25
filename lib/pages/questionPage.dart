@@ -123,73 +123,73 @@ class _RandomizerPageState extends State<QuestionPage> {
     }
   }
 
-  void decreaseDifficulty() async {
-    if (difficultyIndex > 0) {
-      bool proceed = await showDecreaseDifficultyConfirmationDialog();
-      if (!proceed) return; // Do not proceed if user chooses not to
+  // void decreaseDifficulty() async {
+  //   if (difficultyIndex > 0) {
+  //     // bool proceed = await showDecreaseDifficultyConfirmationDialog();
+  //     // if (!proceed) return; // Do not proceed if user chooses not to
 
-      setState(() {
-        fadingOut = true;
-        transitionText = ''; // Reset during fade-out
-      });
+  //     setState(() {
+  //       fadingOut = true;
+  //       transitionText = ''; // Reset during fade-out
+  //     });
 
-      await Future.delayed(Duration(seconds: 1));
+  //     await Future.delayed(Duration(seconds: 1));
 
-      difficultyIndex--;
-      loadQuestionsForDifficulty(difficultyLevels[difficultyIndex]);
+  //     difficultyIndex--;
+  //     loadQuestionsForDifficulty(difficultyLevels[difficultyIndex]);
 
-      setState(() {
-        transitionText = "${difficultyLevels[difficultyIndex]} Round";
-        ;
-      });
+  //     setState(() {
+  //       transitionText = "${difficultyLevels[difficultyIndex]} Round";
+  //       ;
+  //     });
 
-      await Future.delayed(Duration(seconds: 2));
+  //     await Future.delayed(Duration(seconds: 2));
 
-      setState(() {
-        fadingOut = false;
-      });
+  //     setState(() {
+  //       fadingOut = false;
+  //     });
 
-      await Future.delayed(Duration(seconds: 3));
+  //     await Future.delayed(Duration(seconds: 3));
 
-      setState(() {
-        transitionText = '';
-      });
-    }
-  }
+  //     setState(() {
+  //       transitionText = '';
+  //     });
+  //   }
+  // }
 
-  Future<bool> showDecreaseDifficultyConfirmationDialog() async {
-    if (isModalDisplayed) return false;
+  // Future<bool> showDecreaseDifficultyConfirmationDialog() async {
+  //   if (isModalDisplayed) return false;
 
-    isModalDisplayed = true;
+  //   isModalDisplayed = true;
 
-    bool result = await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Return to Previous Round?"),
-              // content: Text("Are you sure you want to return to the previous round?"),
-              actions: <Widget>[
-                TextButton(
-                  child: Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop(false); // Return false
-                  },
-                ),
-                TextButton(
-                  child: Text("Return"),
-                  onPressed: () {
-                    Navigator.of(context).pop(true); // Return true
-                  },
-                ),
-              ],
-            );
-          },
-        ) ??
-        false; // In case the dialog is dismissed, return false
+  //   bool result = await showDialog(
+  //         context: context,
+  //         builder: (BuildContext context) {
+  //           return AlertDialog(
+  //             title: Text("Return to Previous Round?"),
+  //             // content: Text("Are you sure you want to return to the previous round?"),
+  //             actions: <Widget>[
+  //               TextButton(
+  //                 child: Text("Cancel"),
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop(false); // Return false
+  //                 },
+  //               ),
+  //               TextButton(
+  //                 child: Text("Return"),
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop(true); // Return true
+  //                 },
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       ) ??
+  //       false; // In case the dialog is dismissed, return false
 
-    isModalDisplayed = false;
-    return result;
-  }
+  //   isModalDisplayed = false;
+  //   return result;
+  // }
 
   Future<bool> showClincherConfirmationDialog() async {
     if (isModalDisplayed) return false;
@@ -246,7 +246,7 @@ class _RandomizerPageState extends State<QuestionPage> {
       _secondsLeft = 30;
   }
     setState(() {
-      randomQuestions = getRandomQuestions(questions ?? [], 10);
+      randomQuestions = getRandomQuestions(questions ?? [], 12);
       currentPage = 0;
       round = difficulty;
     });
@@ -344,7 +344,7 @@ void _startTimer() {
   void nextPage() {
     if (!isModalDisplayed && !fadingOut) {
       setState(() {
-        if (currentPage < 9) {
+        if (currentPage < 11) {
           currentPage++;
           setTimerForCurrentDifficulty();
           questionState = false;
@@ -363,7 +363,7 @@ void _startTimer() {
           setTimerForCurrentDifficulty();
           questionState = false;
         } else if (difficultyIndex > 0) {
-          decreaseDifficulty();
+          // decreaseDifficulty();
         }
       });
     }
@@ -393,7 +393,7 @@ void _startTimer() {
                 event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
               prevPage();
             }
-            if (currentPage < 10 &&
+            if (currentPage < 12 &&
                 event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
               nextPage();
             }
