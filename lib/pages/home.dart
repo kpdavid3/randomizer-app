@@ -43,7 +43,6 @@ class HomeState extends State<Home> {
       // Load questions from Excel if file path is available
       await loadQuestionsFromExcel(filePath);
     } else {
-      // print("itlog");
       // GlobalData().loadPlaceholderQuestions(); // Call the method on the instance
     }
   }
@@ -127,8 +126,8 @@ class HomeState extends State<Home> {
           questionsByDifficulty[difficulty] = loadedQuestions;
 
           // Debug: Print total questions loaded for each difficulty
-          print(
-              '$difficulty - Total Questions Loaded: ${loadedQuestions.length}');
+          // print(
+          //     '$difficulty - Total Questions Loaded: ${loadedQuestions.length}');
         }
 
         // Update GlobalData with questions for each difficulty
@@ -138,10 +137,10 @@ class HomeState extends State<Home> {
         GlobalData().clincherQuestions = questionsByDifficulty['clincher'];
 
         // Print the correct answer of the first question of each difficulty from GlobalData
-        printFirstQuestionAnswer('easy', GlobalData().easyQuestions);
-        printFirstQuestionAnswer('average', GlobalData().averageQuestions);
-        printFirstQuestionAnswer('difficult', GlobalData().difficultQuestions);
-        printFirstQuestionAnswer('clincher', GlobalData().clincherQuestions);
+        // printFirstQuestionAnswer('easy', GlobalData().easyQuestions);
+        // printFirstQuestionAnswer('average', GlobalData().averageQuestions);
+        // printFirstQuestionAnswer('difficult', GlobalData().difficultQuestions);
+        // printFirstQuestionAnswer('clincher', GlobalData().clincherQuestions);
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('questionsFilePath', filePath);
@@ -159,25 +158,25 @@ class HomeState extends State<Home> {
   }
 
   // FOR DEBUGGING ONLY
-  void printFirstQuestionAnswer(String difficulty, List<Question>? questions) {
-    if (questions != null && questions.isNotEmpty) {
-      var firstQuestion = questions.first;
-      var answerText = firstQuestion is MCQuestion
-          ? firstQuestion.answer
-          : firstQuestion is TFQuestion
-              ? (firstQuestion.answer ? 'True' : 'False')
-              : firstQuestion is IQuestion
-                  ? firstQuestion.answer
-                  : 'Unknown';
-      var explanation = firstQuestion.explanation;
+  // void printFirstQuestionAnswer(String difficulty, List<Question>? questions) {
+  //   if (questions != null && questions.isNotEmpty) {
+  //     var firstQuestion = questions.first;
+  //     var answerText = firstQuestion is MCQuestion
+  //         ? firstQuestion.answer
+  //         : firstQuestion is TFQuestion
+  //             ? (firstQuestion.answer ? 'True' : 'False')
+  //             : firstQuestion is IQuestion
+  //                 ? firstQuestion.answer
+  //                 : 'Unknown';
+  //     var explanation = firstQuestion.explanation;
 
-      print('$difficulty - First Question: ${firstQuestion.questionText}');
-      print('$difficulty - Answer: $answerText');
-      print('$difficulty - Explanation: $explanation');
-    } else {
-      print('$difficulty - No questions available.');
-    }
-  }
+  //     // print('$difficulty - First Question: ${firstQuestion.questionText}');
+  //     // print('$difficulty - Answer: $answerText');
+  //     // print('$difficulty - Explanation: $explanation');
+  //   } else {
+  //     // print('$difficulty - No questions available.');
+  //   }
+  // }
 
   // Method to clear the selected file
   void clearSelectedFile() async {
