@@ -219,9 +219,8 @@ class HomeState extends State<Home> {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
             colors: [
               Colors.yellow,
               Color(0xFF333333),
@@ -237,7 +236,7 @@ class HomeState extends State<Home> {
         child: Center(
           child: Container(
             width: screenWidth * 0.95,
-            height: screenHeight * 0.9,
+            height: screenHeight * 0.93,
             decoration: BoxDecoration(
               image: const DecorationImage(
                 image: AssetImage('assets/background.png'),

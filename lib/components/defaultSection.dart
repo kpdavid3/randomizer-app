@@ -39,12 +39,12 @@ class Defaultsectionstate extends State<Defaultsection> {
           child: Container(
             width: screenWidth * 0.95,
             height: screenHeight * 0.9,
-            decoration: BoxDecoration(
-              image: const DecorationImage(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
                 image: AssetImage('assets/background.png'),
                 fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.circular(20),
+              // borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
