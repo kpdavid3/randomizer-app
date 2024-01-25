@@ -266,13 +266,13 @@ class HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                Text(
-                  'Quiz Randomizer',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 18,
-                    color: const Color(0xFF333333),
-                  ),
-                ),
+                // Text(
+                //   'Quiz Randomizer',
+                //   style: GoogleFonts.montserrat(
+                //     fontSize: 18,
+                //     color: const Color(0xFF333333),
+                //   ),
+                // ),
                 const SizedBox(height: 20),
                 Stack(
                   alignment: Alignment
